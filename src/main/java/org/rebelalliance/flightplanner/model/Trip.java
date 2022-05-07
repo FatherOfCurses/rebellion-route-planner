@@ -1,5 +1,7 @@
 package org.rebelalliance.flightplanner.model;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Date;
@@ -10,6 +12,8 @@ import java.util.UUID;
 @Table(name = "trip")
 public class Trip {
     @Id
+            @GeneratedValue
+            @Type(type="org.hibernate.type.UUIDCharType")
     UUID tripId;
     String routeId;
     String shipId;
@@ -21,7 +25,7 @@ public class Trip {
     Date departureActual;
     Date arrivalActual;
 
-    public Trip(UUID tripId, String routeId, String shipId, String pilotId, List<String> bookings, Date departureScheduled, Date arrivalScheduled, Date departureActual, Date arrivalActual) {
+    private Trip(UUID tripId, String routeId, String shipId, String pilotId, List<String> bookings, Date departureScheduled, Date arrivalScheduled, Date departureActual, Date arrivalActual) {
         this.tripId = tripId;
         this.routeId = routeId;
         this.shipId = shipId;
@@ -31,6 +35,10 @@ public class Trip {
         this.arrivalScheduled = arrivalScheduled;
         this.departureActual = departureActual;
         this.arrivalActual = arrivalActual;
+    }
+
+    public Trip() {
+
     }
 
     public UUID getTripId() {
