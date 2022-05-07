@@ -1,31 +1,54 @@
 package org.rebelalliance.flightplanner.model;
 
+import lombok.*;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Table(name = "trip")
+@Builder
+@NoArgsConstructor
 public class Trip {
     @Id
-            @GeneratedValue
-            @Type(type="org.hibernate.type.UUIDCharType")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Type(type="org.hibernate.type.UUIDCharType")
     UUID tripId;
+
+    @Column(name= "routeid", nullable = false)
     String routeId;
+
+    @Column(name = "shipid", nullable = false)
     String shipId;
+
+    @Column(name = "pilotid", nullable = false)
     String pilotId;
+
     @ElementCollection
+    @Column(name = "bookingid", nullable = false)
     List<String> bookings;
+
+    @Column(name = "departurescheduled", nullable = false)
     Date departureScheduled;
+
+    @Column(name = "arrivalscheduled", nullable = false)
     Date arrivalScheduled;
+
+    @Column(name = "departureactual", nullable = true)
     Date departureActual;
+
+    @Column(name = "arrivalactual", nullable = true)
     Date arrivalActual;
 
-    private Trip(UUID tripId, String routeId, String shipId, String pilotId, List<String> bookings, Date departureScheduled, Date arrivalScheduled, Date departureActual, Date arrivalActual) {
+    @Column(name = "tripstatus", nullable = false)
+    String tripStatus;
+
+    private Trip(UUID tripId, String routeId, String shipId, String pilotId, List<String> bookings, Date departureScheduled, Date arrivalScheduled, Date departureActual, Date arrivalActual, String tripStatus) {
         this.tripId = tripId;
         this.routeId = routeId;
         this.shipId = shipId;
@@ -35,10 +58,7 @@ public class Trip {
         this.arrivalScheduled = arrivalScheduled;
         this.departureActual = departureActual;
         this.arrivalActual = arrivalActual;
-    }
-
-    public Trip() {
-
+        this.tripStatus = tripStatus;
     }
 
     public UUID getTripId() {
@@ -111,5 +131,22 @@ public class Trip {
 
     public void setArrivalActual(Date arrivalActual) {
         this.arrivalActual = arrivalActual;
+    }
+
+    public String getTripStatus() {return tripStatus;}
+
+    public void setTripStatus(String tripStatus) {this.tripStatus = tripStatus;}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Trip trip = (Trip) o;
+        return tripId != null && Objects.equals(tripId, trip.tripId);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

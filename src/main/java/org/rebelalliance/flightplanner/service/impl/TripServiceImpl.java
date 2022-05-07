@@ -3,6 +3,7 @@ package org.rebelalliance.flightplanner.service.impl;
 import org.rebelalliance.flightplanner.model.Trip;
 import org.rebelalliance.flightplanner.repositories.TripRepository;
 import org.rebelalliance.flightplanner.service.TripService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,12 +12,8 @@ import java.util.UUID;
 @Service
 public class TripServiceImpl implements TripService {
 
-    private final TripRepository tripRepository;
-
-    public TripServiceImpl(TripRepository plannerRepository) {
-        this.tripRepository = plannerRepository;
-    }
-
+    @Autowired
+    private TripRepository tripRepository;
 
     @Override
     public Trip Post(Trip params) {
