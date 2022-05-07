@@ -21,6 +21,18 @@ public class Trip {
     Date departureActual;
     Date arrivalActual;
 
+    public Trip(UUID tripId, String routeId, String shipId, String pilotId, List<String> bookings, Date departureScheduled, Date arrivalScheduled, Date departureActual, Date arrivalActual) {
+        this.tripId = tripId;
+        this.routeId = routeId;
+        this.shipId = shipId;
+        this.pilotId = pilotId;
+        this.bookings = bookings;
+        this.departureScheduled = departureScheduled;
+        this.arrivalScheduled = arrivalScheduled;
+        this.departureActual = departureActual;
+        this.arrivalActual = arrivalActual;
+    }
+
     public UUID getTripId() {
         return tripId;
     }
