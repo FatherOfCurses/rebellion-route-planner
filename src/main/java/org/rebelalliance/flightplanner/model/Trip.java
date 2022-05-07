@@ -29,8 +29,7 @@ public class Trip {
     @Column(name = "pilotid", nullable = false)
     String pilotId;
 
-    @ElementCollection
-    @Column(name = "bookingid", nullable = false)
+    @ElementCollection(name = "bookingid", nullable = false)
     List<String> bookings;
 
     @Column(name = "departurescheduled", nullable = false)
