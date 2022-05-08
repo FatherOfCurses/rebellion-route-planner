@@ -1,5 +1,7 @@
 package org.rebelalliance.flightplanner.model;
 
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -9,7 +11,9 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
+@Builder
 @Table(name = "trip", schema = "public", catalog = "routemapper")
+@NoArgsConstructor
 public class TripEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Type(type="org.hibernate.type.UUIDCharType")
@@ -25,9 +29,9 @@ public class TripEntity {
     @Basic
     @Column(name = "pilotid")
     private UUID pilotid;
-    @ElementCollection
-    @Column(name = "bookingid")
-    private List<UUID> bookingid;
+    @OneToMany(targetEntity = BookingEntity.class, cascade = CascadeType.ALL,
+    fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<BookingEntity> bookings;
     @Basic
     @Column(name = "departurescheduled")
     private Date departurescheduled;
@@ -44,44 +48,57 @@ public class TripEntity {
     @Column(name = "tripstatus")
     private String tripstatus;
 
-    public Object getId() {
+    public TripEntity(UUID id, UUID routeid, UUID shipid, UUID pilotid, List<BookingEntity> bookings, Date departurescheduled, Date arrivalscheduled, Date departureactual, Date arrivalactual, String tripstatus) {
+        this.id = id;
+        this.routeid = routeid;
+        this.shipid = shipid;
+        this.pilotid = pilotid;
+        this.bookings = bookings;
+        this.departurescheduled = departurescheduled;
+        this.arrivalscheduled = arrivalscheduled;
+        this.departureactual = departureactual;
+        this.arrivalactual = arrivalactual;
+        this.tripstatus = tripstatus;
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Object id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public Object getRouteid() {
+    public UUID getRouteid() {
         return routeid;
     }
 
-    public void setRouteid(Object routeid) {
+    public void setRouteid(UUID routeid) {
         this.routeid = routeid;
     }
 
-    public Object getShipid() {
+    public UUID getShipid() {
         return shipid;
     }
 
-    public void setShipid(Object shipid) {
+    public void setShipid(UUID shipid) {
         this.shipid = shipid;
     }
 
-    public Object getPilotid() {
+    public UUID getPilotid() {
         return pilotid;
     }
 
-    public void setPilotid(Object pilotid) {
+    public void setPilotid(UUID pilotid) {
         this.pilotid = pilotid;
     }
 
-    public Object getBookingid() {
-        return bookingid;
+    public List<BookingEntity> getBookings() {
+        return bookings;
     }
 
-    public void setBookingid(Object bookingid) {
-        this.bookingid = bookingid;
+    public void setBookings(List<BookingEntity> bookings) {
+        this.bookings = bookings;
     }
 
     public Date getDeparturescheduled() {
@@ -129,11 +146,11 @@ public class TripEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TripEntity that = (TripEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(routeid, that.routeid) && Objects.equals(shipid, that.shipid) && Objects.equals(pilotid, that.pilotid) && Objects.equals(bookingid, that.bookingid) && Objects.equals(departurescheduled, that.departurescheduled) && Objects.equals(arrivalscheduled, that.arrivalscheduled) && Objects.equals(departureactual, that.departureactual) && Objects.equals(arrivalactual, that.arrivalactual) && Objects.equals(tripstatus, that.tripstatus);
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getRouteid(), that.getRouteid()) && Objects.equals(getShipid(), that.getShipid()) && Objects.equals(getPilotid(), that.getPilotid()) && Objects.equals(getBookings(), that.getBookings()) && Objects.equals(getDeparturescheduled(), that.getDeparturescheduled()) && Objects.equals(getArrivalscheduled(), that.getArrivalscheduled()) && Objects.equals(getDepartureactual(), that.getDepartureactual()) && Objects.equals(getArrivalactual(), that.getArrivalactual()) && Objects.equals(getTripstatus(), that.getTripstatus());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, routeid, shipid, pilotid, bookingid, departurescheduled, arrivalscheduled, departureactual, arrivalactual, tripstatus);
+        return Objects.hash(getId(), getRouteid(), getShipid(), getPilotid(), getBookings(), getDeparturescheduled(), getArrivalscheduled(), getDepartureactual(), getArrivalactual(), getTripstatus());
     }
 }

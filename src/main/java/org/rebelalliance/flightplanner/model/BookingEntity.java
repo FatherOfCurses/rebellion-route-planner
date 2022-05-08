@@ -1,22 +1,32 @@
 package org.rebelalliance.flightplanner.model;
 
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
+@Builder
 @Table(name = "booking", schema = "public", catalog = "routemapper")
+@NoArgsConstructor
 public class BookingEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id", nullable = false)
-    private Object id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
+    @ManyToOne
+    TripEntity trip;
     @Basic
     @Column(name = "cargoid", nullable = true)
-    private Object cargoid;
+    private UUID cargoid;
     @Basic
     @Column(name = "customerid", nullable = false)
-    private Object customerid;
+    private UUID customerid;
     @Basic
     @Column(name = "bookingtype", nullable = false, length = -1)
     private String bookingtype;
@@ -26,31 +36,38 @@ public class BookingEntity {
     @Basic
     @Column(name = "status", nullable = false, length = -1)
     private String status;
-    @Basic
-    @Column(name = "tripid", nullable = false)
-    private Object tripid;
+
+    public BookingEntity(UUID id, TripEntity trip, UUID cargoid, UUID customerid, String bookingtype, Date datebooked, String status) {
+        this.id = id;
+        this.trip = trip;
+        this.cargoid = cargoid;
+        this.customerid = customerid;
+        this.bookingtype = bookingtype;
+        this.datebooked = datebooked;
+        this.status = status;
+    }
 
     public Object getId() {
         return id;
     }
 
-    public void setId(Object id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public Object getCargoid() {
+    public UUID getCargoid() {
         return cargoid;
     }
 
-    public void setCargoid(Object cargoid) {
+    public void setCargoid(UUID cargoid) {
         this.cargoid = cargoid;
     }
 
-    public Object getCustomerid() {
+    public UUID getCustomerid() {
         return customerid;
     }
 
-    public void setCustomerid(Object customerid) {
+    public void setCustomerid(UUID customerid) {
         this.customerid = customerid;
     }
 
@@ -78,12 +95,12 @@ public class BookingEntity {
         this.status = status;
     }
 
-    public Object getTripid() {
-        return tripid;
+    public TripEntity getTrip() {
+        return trip;
     }
 
-    public void setTripid(Object tripid) {
-        this.tripid = tripid;
+    public void setTrip(TripEntity trip) {
+        this.trip = trip;
     }
 
     @Override
@@ -91,11 +108,11 @@ public class BookingEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BookingEntity that = (BookingEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(cargoid, that.cargoid) && Objects.equals(customerid, that.customerid) && Objects.equals(bookingtype, that.bookingtype) && Objects.equals(datebooked, that.datebooked) && Objects.equals(status, that.status) && Objects.equals(tripid, that.tripid);
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getTrip(), that.getTrip()) && Objects.equals(getCargoid(), that.getCargoid()) && Objects.equals(getCustomerid(), that.getCustomerid()) && Objects.equals(getBookingtype(), that.getBookingtype()) && Objects.equals(getDatebooked(), that.getDatebooked()) && Objects.equals(getStatus(), that.getStatus());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, cargoid, customerid, bookingtype, datebooked, status, tripid);
+        return Objects.hash(getId(), getTrip(), getCargoid(), getCustomerid(), getBookingtype(), getDatebooked(), getStatus());
     }
 }
