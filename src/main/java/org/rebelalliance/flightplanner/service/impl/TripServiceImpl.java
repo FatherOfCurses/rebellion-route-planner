@@ -17,7 +17,7 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public TripEntity Post(TripEntity params) {
-        tripRepository.saveAll(params);
+        tripRepository .save(params);
         return params;
     }
 
@@ -28,12 +28,12 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public TripEntity Get(UUID id) {
-        return tripRepository.findOneByUuid(id);
+        return tripRepository.getById(id);
     }
 
     @Override
     public TripEntity Update(TripEntity params, UUID id) {
-        TripEntity trip = tripRepository.findOneByUuid(id);
+        TripEntity trip = tripRepository.getById(id);
         trip.setRouteid(params.getRouteid());
         trip.setShipid(params.getShipid());
         trip.setPilotid(params.getPilotid());
@@ -42,12 +42,12 @@ public class TripServiceImpl implements TripService {
         trip.setArrivalscheduled(params.getArrivalscheduled());
         trip.setDepartureactual(params.getDepartureactual());
         trip.setArrivalactual(params.getArrivalactual());
-        return tripRepository.saveAll(trip);
+        return tripRepository.save(trip);
     }
 
     @Override
     public String Delete(UUID id) {
-        tripRepository.deleteOneByUuid(id);
+        tripRepository.deleteById(id);
         return "Trip(" + id + ")" + " has been deleted";
     }
 }

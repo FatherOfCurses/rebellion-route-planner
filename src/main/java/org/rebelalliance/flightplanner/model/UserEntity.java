@@ -1,17 +1,24 @@
 package org.rebelalliance.flightplanner.model;
 
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.type.UUIDCharType;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
+@Builder
 @Table(name = "user", schema = "public", catalog = "routemapper")
+@NoArgsConstructor
 public class UserEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id", nullable = false)
-    private UUIDCharType id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
     @Basic
     @Column(name = "firstname", nullable = false, length = -1)
     private String firstname;
@@ -28,11 +35,20 @@ public class UserEntity {
     @Column(name = "email", nullable = false, length = -1)
     private String email;
 
-    public UUIDCharType getId() {
+    public UserEntity(UUID id, String firstname, String lastname, String usertype, String username, String email) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.usertype = usertype;
+        this.username = username;
+        this.email = email;
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(UUIDCharType id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

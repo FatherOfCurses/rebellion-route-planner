@@ -1,15 +1,23 @@
 package org.rebelalliance.flightplanner.model;
 
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
+@Builder
+@NoArgsConstructor
 @Table(name = "ship", schema = "public", catalog = "routemapper")
 public class ShipEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", nullable = false)
-    private Object id;
+    private UUID id;
     @Basic
     @Column(name = "shipname", nullable = false, length = -1)
     private String shipname;
@@ -26,11 +34,20 @@ public class ShipEntity {
     @Column(name = "shipcapacity", nullable = false)
     private Integer shipcapacity;
 
-    public Object getId() {
+    public ShipEntity(UUID id, String shipname, Integer shiprange, String shiptype, String shipsize, Integer shipcapacity) {
+        this.id = id;
+        this.shipname = shipname;
+        this.shiprange = shiprange;
+        this.shiptype = shiptype;
+        this.shipsize = shipsize;
+        this.shipcapacity = shipcapacity;
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Object id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -79,11 +96,13 @@ public class ShipEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ShipEntity that = (ShipEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(shipname, that.shipname) && Objects.equals(shiprange, that.shiprange) && Objects.equals(shiptype, that.shiptype) && Objects.equals(shipsize, that.shipsize) && Objects.equals(shipcapacity, that.shipcapacity);
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getShipname(), that.getShipname()) && Objects.equals(getShiprange(), that.getShiprange()) && Objects.equals(getShiptype(), that.getShiptype()) && Objects.equals(getShipsize(), that.getShipsize()) && Objects.equals(getShipcapacity(), that.getShipcapacity());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, shipname, shiprange, shiptype, shipsize, shipcapacity);
+        return Objects.hash(getId(), getShipname(), getShiprange(), getShiptype(), getShipsize(), getShipcapacity());
     }
+
+
 }

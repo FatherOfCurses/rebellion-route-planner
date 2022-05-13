@@ -1,24 +1,31 @@
 package org.rebelalliance.flightplanner.model;
 
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
+@Builder
+@NoArgsConstructor
 @Table(name = "route", schema = "public", catalog = "routemapper")
 public class RouteEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", nullable = false)
-    private Object id;
-    @Basic
-    @Column(name = "originid", nullable = false)
-    private Object originid;
-    @Basic
-    @Column(name = "destinationid", nullable = false)
-    private Object destinationid;
-    @Basic
+    private UUID id;
+    @OneToOne
+    private SpaceportEntity originPort;
+    @OneToOne
+    private SpaceportEntity destinationPort;
+    @OneToMany(targetEntity = SpaceportEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @Column(name = "waypointid", nullable = true)
-    private Object waypointid;
+    private List<SpaceportEntity> waypoints;
     @Basic
     @Column(name = "length", nullable = false)
     private Integer length;
@@ -26,36 +33,45 @@ public class RouteEntity {
     @Column(name = "leglengthminium", nullable = false)
     private Integer leglengthminium;
 
-    public Object getId() {
+    public RouteEntity(UUID id, SpaceportEntity originPort, SpaceportEntity destinationPort, List<SpaceportEntity> waypoints, Integer length, Integer leglengthminium) {
+        this.id = id;
+        this.originPort = originPort;
+        this.destinationPort = destinationPort;
+        this.waypoints = waypoints;
+        this.length = length;
+        this.leglengthminium = leglengthminium;
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Object id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public Object getOriginid() {
-        return originid;
+    public SpaceportEntity getOriginPort() {
+        return originPort;
     }
 
-    public void setOriginid(Object originid) {
-        this.originid = originid;
+    public void setOriginPort(SpaceportEntity originPort) {
+        this.originPort = originPort;
     }
 
-    public Object getDestinationid() {
-        return destinationid;
+    public SpaceportEntity getDestinationPort() {
+        return destinationPort;
     }
 
-    public void setDestinationid(Object destinationid) {
-        this.destinationid = destinationid;
+    public void setDestinationPort(SpaceportEntity destinationPort) {
+        this.destinationPort = destinationPort;
     }
 
-    public Object getWaypointid() {
-        return waypointid;
+    public List<SpaceportEntity> getWaypoints() {
+        return waypoints;
     }
 
-    public void setWaypointid(Object waypointid) {
-        this.waypointid = waypointid;
+    public void setWaypoints(List<SpaceportEntity> waypoints) {
+        this.waypoints = waypoints;
     }
 
     public Integer getLength() {
@@ -79,11 +95,11 @@ public class RouteEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RouteEntity that = (RouteEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(originid, that.originid) && Objects.equals(destinationid, that.destinationid) && Objects.equals(waypointid, that.waypointid) && Objects.equals(length, that.length) && Objects.equals(leglengthminium, that.leglengthminium);
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getOriginPort(), that.getOriginPort()) && Objects.equals(getDestinationPort(), that.getDestinationPort()) && Objects.equals(getWaypoints(), that.getWaypoints()) && Objects.equals(getLength(), that.getLength()) && Objects.equals(getLeglengthminium(), that.getLeglengthminium());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, originid, destinationid, waypointid, length, leglengthminium);
+        return Objects.hash(getId(), getOriginPort(), getDestinationPort(), getWaypoints(), getLength(), getLeglengthminium());
     }
 }

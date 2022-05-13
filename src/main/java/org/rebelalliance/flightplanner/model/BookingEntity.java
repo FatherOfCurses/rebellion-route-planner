@@ -20,13 +20,11 @@ public class BookingEntity {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
     @ManyToOne
-    TripEntity trip;
-    @Basic
-    @Column(name = "cargoid", nullable = true)
-    private UUID cargoid;
-    @Basic
-    @Column(name = "customerid", nullable = false)
-    private UUID customerid;
+    private TripEntity trip;
+    @ManyToOne
+    private CargoEntity cargo;
+    @OneToOne
+    private UserEntity customer;
     @Basic
     @Column(name = "bookingtype", nullable = false, length = -1)
     private String bookingtype;
@@ -37,17 +35,17 @@ public class BookingEntity {
     @Column(name = "status", nullable = false, length = -1)
     private String status;
 
-    public BookingEntity(UUID id, TripEntity trip, UUID cargoid, UUID customerid, String bookingtype, Date datebooked, String status) {
+    public BookingEntity(UUID id, TripEntity trip, CargoEntity cargo, UserEntity customer, String bookingtype, Date datebooked, String status) {
         this.id = id;
         this.trip = trip;
-        this.cargoid = cargoid;
-        this.customerid = customerid;
+        this.cargo = cargo;
+        this.customer = customer;
         this.bookingtype = bookingtype;
         this.datebooked = datebooked;
         this.status = status;
     }
 
-    public Object getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -55,20 +53,28 @@ public class BookingEntity {
         this.id = id;
     }
 
-    public UUID getCargoid() {
-        return cargoid;
+    public TripEntity getTrip() {
+        return trip;
     }
 
-    public void setCargoid(UUID cargoid) {
-        this.cargoid = cargoid;
+    public void setTrip(TripEntity trip) {
+        this.trip = trip;
     }
 
-    public UUID getCustomerid() {
-        return customerid;
+    public CargoEntity getCargo() {
+        return cargo;
     }
 
-    public void setCustomerid(UUID customerid) {
-        this.customerid = customerid;
+    public void setCargo(CargoEntity cargo) {
+        this.cargo = cargo;
+    }
+
+    public UserEntity getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(UserEntity customer) {
+        this.customer = customer;
     }
 
     public String getBookingtype() {
@@ -95,24 +101,16 @@ public class BookingEntity {
         this.status = status;
     }
 
-    public TripEntity getTrip() {
-        return trip;
-    }
-
-    public void setTrip(TripEntity trip) {
-        this.trip = trip;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BookingEntity that = (BookingEntity) o;
-        return Objects.equals(getId(), that.getId()) && Objects.equals(getTrip(), that.getTrip()) && Objects.equals(getCargoid(), that.getCargoid()) && Objects.equals(getCustomerid(), that.getCustomerid()) && Objects.equals(getBookingtype(), that.getBookingtype()) && Objects.equals(getDatebooked(), that.getDatebooked()) && Objects.equals(getStatus(), that.getStatus());
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getTrip(), that.getTrip()) && Objects.equals(getCargo(), that.getCargo()) && Objects.equals(getCustomer(), that.getCustomer()) && Objects.equals(getBookingtype(), that.getBookingtype()) && Objects.equals(getDatebooked(), that.getDatebooked()) && Objects.equals(getStatus(), that.getStatus());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTrip(), getCargoid(), getCustomerid(), getBookingtype(), getDatebooked(), getStatus());
+        return Objects.hash(getId(), getTrip(), getCargo(), getCustomer(), getBookingtype(), getDatebooked(), getStatus());
     }
 }

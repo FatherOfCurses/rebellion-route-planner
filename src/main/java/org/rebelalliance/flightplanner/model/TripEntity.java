@@ -2,7 +2,7 @@ package org.rebelalliance.flightplanner.model;
 
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -12,13 +12,13 @@ import java.util.UUID;
 
 @Entity
 @Builder
-@Table(name = "trip", schema = "public", catalog = "routemapper")
 @NoArgsConstructor
+@Table(name = "trip", schema = "public", catalog = "routemapper")
 public class TripEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Type(type="org.hibernate.type.UUIDCharType")
     @Id
-    @Column(name = "id")
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
     @Basic
     @Column(name = "routeid")
@@ -30,7 +30,7 @@ public class TripEntity {
     @Column(name = "pilotid")
     private UUID pilotid;
     @OneToMany(targetEntity = BookingEntity.class, cascade = CascadeType.ALL,
-    fetch = FetchType.LAZY, orphanRemoval = true)
+            fetch = FetchType.LAZY, orphanRemoval = true)
     private List<BookingEntity> bookings;
     @Basic
     @Column(name = "departurescheduled")
@@ -154,3 +154,4 @@ public class TripEntity {
         return Objects.hash(getId(), getRouteid(), getShipid(), getPilotid(), getBookings(), getDeparturescheduled(), getArrivalscheduled(), getDepartureactual(), getArrivalactual(), getTripstatus());
     }
 }
+

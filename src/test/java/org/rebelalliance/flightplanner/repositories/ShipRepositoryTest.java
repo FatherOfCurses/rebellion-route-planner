@@ -1,0 +1,45 @@
+package org.rebelalliance.flightplanner.repositories;
+
+import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.runner.RunWith;
+import org.rebelalliance.flightplanner.helpers.EntityHelper;
+import org.rebelalliance.flightplanner.model.ShipEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.UUID;
+
+@RunWith(SpringRunner.class)
+@DataJpaTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class ShipRepositoryTest {
+
+    EntityHelper entityHelper = new EntityHelper();
+
+    @Autowired
+    private TestEntityManager entityManager;
+
+    @Autowired
+    private ShipRepository shipRepository;
+
+
+    @Test
+    @Order(1)
+    @Rollback(value = false)
+    public void saveShipTest() {
+        ShipEntity testShip = entityHelper.createShipEntity();
+        UUID shipId = testShip.getId();
+        entityManager.persistAndFlush(testShip);
+
+        ShipEntity expected = shipRepository.getById(shipId);
+        assert(expected.getId()).equals(shipId);
+
+    }
+}

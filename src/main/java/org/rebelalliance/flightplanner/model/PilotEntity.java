@@ -1,53 +1,67 @@
 package org.rebelalliance.flightplanner.model;
 
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
+@Builder
+@NoArgsConstructor
 @Table(name = "pilot", schema = "public", catalog = "routemapper")
 public class PilotEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", nullable = false)
-    private Object id;
-    @Basic
-    @Column(name = "userid", nullable = false)
-    private Object userid;
+    private UUID id;
+    @OneToOne
+    private UserEntity user;
     @Basic
     @Column(name = "classification", nullable = false, length = -1)
-    private String classification;
+    private String rating;
     @Basic
     @Column(name = "standing", nullable = false, length = -1)
     private String standing;
-    @Basic
-    @Column(name = "baseportid", nullable = false)
-    private Object baseportid;
-    @Basic
-    @Column(name = "currentportid", nullable = true)
-    private Object currentportid;
+    @OneToOne
+    private SpaceportEntity homePort;
+    @OneToOne
+    private SpaceportEntity  currentPort;
 
-    public Object getId() {
+    public PilotEntity(UUID id, UserEntity user, String rating, String standing, SpaceportEntity homePort, SpaceportEntity currentPort) {
+        this.id = id;
+        this.user = user;
+        this.rating = rating;
+        this.standing = standing;
+        this.homePort = homePort;
+        this.currentPort = currentPort;
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Object id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public Object getUserid() {
-        return userid;
+    public UserEntity getUser() {
+        return user;
     }
 
-    public void setUserid(Object userid) {
-        this.userid = userid;
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
-    public String getClassification() {
-        return classification;
+    public String getRating() {
+        return rating;
     }
 
-    public void setClassification(String classification) {
-        this.classification = classification;
+    public void setRating(String rating) {
+        this.rating = rating;
     }
 
     public String getStanding() {
@@ -58,20 +72,20 @@ public class PilotEntity {
         this.standing = standing;
     }
 
-    public Object getBaseportid() {
-        return baseportid;
+    public SpaceportEntity getHomePort() {
+        return homePort;
     }
 
-    public void setBaseportid(Object baseportid) {
-        this.baseportid = baseportid;
+    public void setHomePort(SpaceportEntity homePort) {
+        this.homePort = homePort;
     }
 
-    public Object getCurrentportid() {
-        return currentportid;
+    public SpaceportEntity getCurrentPort() {
+        return currentPort;
     }
 
-    public void setCurrentportid(Object currentportid) {
-        this.currentportid = currentportid;
+    public void setCurrentPort(SpaceportEntity currentPort) {
+        this.currentPort = currentPort;
     }
 
     @Override
@@ -79,11 +93,11 @@ public class PilotEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PilotEntity that = (PilotEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(userid, that.userid) && Objects.equals(classification, that.classification) && Objects.equals(standing, that.standing) && Objects.equals(baseportid, that.baseportid) && Objects.equals(currentportid, that.currentportid);
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getUser(), that.getUser()) && Objects.equals(getRating(), that.getRating()) && Objects.equals(getStanding(), that.getStanding()) && Objects.equals(getHomePort(), that.getHomePort()) && Objects.equals(getCurrentPort(), that.getCurrentPort());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userid, classification, standing, baseportid, currentportid);
+        return Objects.hash(getId(), getUser(), getRating(), getStanding(), getHomePort(), getCurrentPort());
     }
 }
