@@ -36,6 +36,7 @@ public class EntityHelper {
     public UserEntity createCargoCustomer() {
         UserEntity cargoCustomer = new UserEntity();
         cargoCustomer = UserEntity.builder()
+                .id(UUID.randomUUID())
                 .firstname("Jabba")
                 .lastname("The Hutt")
                 .usertype("cargo")
@@ -47,6 +48,7 @@ public class EntityHelper {
 
     public UserEntity createPassenger() {
         return UserEntity.builder()
+                .id(UUID.randomUUID())
                 .firstname("Obi-Wan")
                 .lastname("Kenobi")
                 .usertype("passenger")
@@ -61,6 +63,7 @@ public class EntityHelper {
         facilities.add("freighter repair");
         facilities.add("passenger lounge");
         return SpaceportEntity.builder()
+                .id(UUID.randomUUID())
                 .civilianResidents(portResidents)
                 .civilianVisitors(portVisitors)
                 .pilotResidents(homePilots)
@@ -77,11 +80,14 @@ public class EntityHelper {
 
     public RouteEntity createRoute() {
         return RouteEntity.builder()
+                .id(UUID.randomUUID())
                 .build();
     }
 
     public CargoEntity createCargoEntity() {
-        return CargoEntity.builder().build();
+        return CargoEntity.builder()
+                .id(UUID.randomUUID())
+                .build();
     }
 
     public ShipEntity createShipEntity() {

@@ -35,9 +35,6 @@ public class ShipRepositoryTest {
     @Rollback(value = true)
     public void saveShipTest() {
         ShipEntity testShip = entityHelper.createShipEntity();
-        System.out.println(testShip.getId());
-        System.out.println(testShip.getShipname());
-        // UUID shipId = UUID.fromString("65df5848-45f4-4972-bc77-b88c3468fa34");
         UUID shipId = testShip.getId();
         try{
             entityManager.persist(testShip);
@@ -47,6 +44,20 @@ public class ShipRepositoryTest {
 
         ShipEntity expected = shipRepository.getById(shipId);
         assert(expected.getId()).equals(shipId);
+    }
 
+    @Test
+    @Order(2)
+    @Rollback(value = true)
+    public void updateShipTest() {
+        ShipEntity testShip = entityHelper.createShipEntity();
+        UUID shipId = testShip.getId();
+        entityManager.persist(testShip);
+
+        ShipEntity shipToUpdate = shipRepository.getById(shipId);
+        shipToUpdate.setShipname("Spirit of Mandalore");
+        shipRepository.save(shipToUpdate);
+        String actualShipName = shipRepository.getById(shipId).getShipname();
+        assert(actualShipName).equals("Spirit of Mandalore");
     }
 }
