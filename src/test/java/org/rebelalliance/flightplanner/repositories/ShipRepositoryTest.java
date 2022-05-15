@@ -32,11 +32,18 @@ public class ShipRepositoryTest {
 
     @Test
     @Order(1)
-    @Rollback(value = false)
+    @Rollback(value = true)
     public void saveShipTest() {
         ShipEntity testShip = entityHelper.createShipEntity();
+        System.out.println(testShip.getId());
+        System.out.println(testShip.getShipname());
+        // UUID shipId = UUID.fromString("65df5848-45f4-4972-bc77-b88c3468fa34");
         UUID shipId = testShip.getId();
-        entityManager.persistAndFlush(testShip);
+        try{
+            entityManager.persist(testShip);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         ShipEntity expected = shipRepository.getById(shipId);
         assert(expected.getId()).equals(shipId);

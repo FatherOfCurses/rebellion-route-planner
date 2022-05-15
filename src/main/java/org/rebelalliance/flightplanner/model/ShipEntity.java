@@ -14,8 +14,6 @@ import java.util.UUID;
 @Table(name = "ship", schema = "public", catalog = "routemapper")
 public class ShipEntity {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", nullable = false)
     private UUID id;
     @Basic

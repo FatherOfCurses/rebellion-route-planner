@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class EntityHelper {
 
@@ -15,9 +16,8 @@ public class EntityHelper {
     List<PilotEntity> visitingPilots = bulkCreatePilots(30);
 
     public List<UserEntity> bulkCreateUsers(int numberOfUsers) {
-        List<UserEntity> userList = null;
+        List<UserEntity> userList = new ArrayList<UserEntity>();
         for (int i = 0; i < numberOfUsers; i++) {
-            userList = new ArrayList<UserEntity>();
             UserEntity newUser = new UserEntity();
             userList.add(newUser);
         }
@@ -25,9 +25,8 @@ public class EntityHelper {
     }
 
     public List<PilotEntity> bulkCreatePilots(int numberOfPilots) {
-        List<PilotEntity> pilotList = null;
+        List<PilotEntity> pilotList = new ArrayList<PilotEntity>();
         for (int i = 0; i < numberOfPilots; i++) {
-            pilotList = new ArrayList<PilotEntity>();
             PilotEntity newPilot = new PilotEntity();
             pilotList.add(newPilot);
         }
@@ -47,15 +46,13 @@ public class EntityHelper {
     }
 
     public UserEntity createPassenger() {
-        UserEntity passenger = new UserEntity();
-        passenger = UserEntity.builder()
+        return UserEntity.builder()
                 .firstname("Obi-Wan")
                 .lastname("Kenobi")
                 .usertype("passenger")
                 .username("benK")
                 .email("obiwankenobi@jediorder.org")
                 .build();
-        return passenger;
     }
 
     public SpaceportEntity createSpaceport() {
@@ -63,8 +60,7 @@ public class EntityHelper {
         facilities.add("fuel");
         facilities.add("freighter repair");
         facilities.add("passenger lounge");
-        SpaceportEntity departurePort = new SpaceportEntity();
-        departurePort = SpaceportEntity.builder()
+        return SpaceportEntity.builder()
                 .civilianResidents(portResidents)
                 .civilianVisitors(portVisitors)
                 .pilotResidents(homePilots)
@@ -77,40 +73,34 @@ public class EntityHelper {
                 .locationZ(11)
                 .status("SECURE")
                 .build();
-        return departurePort;
     }
 
     public RouteEntity createRoute() {
-        RouteEntity route = new RouteEntity();
-        route = RouteEntity.builder()
+        return RouteEntity.builder()
                 .build();
-        return route;
     }
 
     public CargoEntity createCargoEntity() {
-        return new CargoEntity().builder().build();
+        return CargoEntity.builder().build();
     }
 
     public ShipEntity createShipEntity() {
-        ShipEntity ship = new ShipEntity();
-        ship = ShipEntity.builder()
+        return ShipEntity.builder()
+                .id(UUID.randomUUID())
                 .shipcapacity(50000)
                 .shipname("Razor Crest")
                 .shiprange(782999)
                 .shipsize("medium")
                 .shiptype("freighter")
                 .build();
-        return ship;
     }
 
     public BookingEntity createNookingEntity() {
-        BookingEntity booking = new BookingEntity();
-        booking = BookingEntity.builder()
+        return BookingEntity.builder()
                 .trip(new TripEntity())
                 .bookingtype("passenger")
                 .datebooked(Date.valueOf(LocalDate.now()))
                 .status("confirmed")
                 .build();
-        return booking;
     }
 }
