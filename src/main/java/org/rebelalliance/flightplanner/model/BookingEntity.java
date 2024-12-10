@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Entity
 @Builder
-@Table(name = "booking", schema = "public", catalog = "routemapper")
+@Table(name = "booking", schema = "public")
 @NoArgsConstructor
 public class BookingEntity {
     @Id
@@ -20,7 +20,7 @@ public class BookingEntity {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
     @ManyToOne
-    private TripEntity trip;
+    private RouteEntity route;
     @ManyToOne
     private CargoEntity cargo;
     @OneToOne
@@ -35,9 +35,9 @@ public class BookingEntity {
     @Column(name = "status", nullable = false, length = -1)
     private String status;
 
-    public BookingEntity(UUID id, TripEntity trip, CargoEntity cargo, UserEntity customer, String bookingtype, Date datebooked, String status) {
+    public BookingEntity(UUID id, RouteEntity route, CargoEntity cargo, UserEntity customer, String bookingtype, Date datebooked, String status) {
         this.id = id;
-        this.trip = trip;
+        this.route = route;
         this.cargo = cargo;
         this.customer = customer;
         this.bookingtype = bookingtype;
@@ -53,12 +53,12 @@ public class BookingEntity {
         this.id = id;
     }
 
-    public TripEntity getTrip() {
-        return trip;
+    public RouteEntity getRoute() {
+        return route;
     }
 
-    public void setTrip(TripEntity trip) {
-        this.trip = trip;
+    public void setRoute(RouteEntity route) {
+        this.route = route;
     }
 
     public CargoEntity getCargo() {
@@ -106,11 +106,11 @@ public class BookingEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BookingEntity that = (BookingEntity) o;
-        return Objects.equals(getId(), that.getId()) && Objects.equals(getTrip(), that.getTrip()) && Objects.equals(getCargo(), that.getCargo()) && Objects.equals(getCustomer(), that.getCustomer()) && Objects.equals(getBookingtype(), that.getBookingtype()) && Objects.equals(getDatebooked(), that.getDatebooked()) && Objects.equals(getStatus(), that.getStatus());
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getRoute(), that.getRoute()) && Objects.equals(getCargo(), that.getCargo()) && Objects.equals(getCustomer(), that.getCustomer()) && Objects.equals(getBookingtype(), that.getBookingtype()) && Objects.equals(getDatebooked(), that.getDatebooked()) && Objects.equals(getStatus(), that.getStatus());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTrip(), getCargo(), getCustomer(), getBookingtype(), getDatebooked(), getStatus());
+        return Objects.hash(getId(), getRoute(), getCargo(), getCustomer(), getBookingtype(), getDatebooked(), getStatus());
     }
 }

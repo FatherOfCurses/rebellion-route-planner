@@ -13,12 +13,12 @@ import java.util.UUID;
 @Entity
 @Builder
 @NoArgsConstructor
-@Table(name = "trip", schema = "public", catalog = "routemapper")
+@Table(name = "trip", schema = "public")
 public class TripEntity {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "id", updatable = true, nullable = false)
     private UUID id;
     @Basic
     @Column(name = "routeid")
@@ -30,7 +30,7 @@ public class TripEntity {
     @Column(name = "pilotid")
     private UUID pilotid;
     @OneToMany(targetEntity = BookingEntity.class, cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, orphanRemoval = true)
+            fetch = FetchType.EAGER, orphanRemoval = true)
     private List<BookingEntity> bookings;
     @Basic
     @Column(name = "departurescheduled")

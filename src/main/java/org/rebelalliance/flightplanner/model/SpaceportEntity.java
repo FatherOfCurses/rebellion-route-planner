@@ -2,15 +2,24 @@ package org.rebelalliance.flightplanner.model;
 
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import org.apache.tomcat.util.buf.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
-import java.util.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Column;
+import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.Basic;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Builder
-@Table(name = "spaceport", schema = "public", catalog = "routemapper")
+@Table(name = "spaceport", schema = "public")
 @NoArgsConstructor
 
 public class SpaceportEntity {
@@ -28,26 +37,25 @@ public class SpaceportEntity {
     @OneToMany(targetEntity = PilotEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<PilotEntity> pilotVisitors;
     @Basic
-    @Column(name="portname", nullable = false)
+    @Column(name = "portname", nullable = false)
     private String spaceportName;
     @Basic
-    @Column(name="portsize", nullable = false)
+    @Column(name = "portsize", nullable = false)
     private String spaceportSize;
     @Basic
-    @Column(name="facilities", nullable = false)
-    @Convert(converter = ListToStringConverter.class)
+    @Column(name = "facilities", nullable = false)
     private List<String> facilities;
     @Basic
-    @Column(name="locationX", nullable = false)
+    @Column(name = "locationX", nullable = false)
     private int locationX;
     @Basic
-    @Column(name="locationY", nullable = false)
+    @Column(name = "locationY", nullable = false)
     private int locationY;
     @Basic
-    @Column(name="locationZ", nullable = false)
+    @Column(name = "locationZ", nullable = false)
     private int locationZ;
     @Basic
-    @Column(name="status", nullable = false)
+    @Column(name = "status", nullable = false)
     private String status;
 
     public SpaceportEntity(UUID id, List<UserEntity> civilianResidents, List<UserEntity> civilianVisitors, List<PilotEntity> pilotResidents, List<PilotEntity> pilotVisitors, String spaceportName, String spaceportSize, List<String> facilities, int locationX, int locationY, int locationZ, String status) {
@@ -172,27 +180,5 @@ public class SpaceportEntity {
     @Override
     public int hashCode() {
         return Objects.hash(getId(), getCivilianResidents(), getCivilianVisitors(), getPilotResidents(), getPilotVisitors(), getSpaceportName(), getSpaceportSize(), getFacilities(), getLocationX(), getLocationY(), getLocationZ(), getStatus());
-    }
-
-    @Converter
-    public static class ListToStringConverter implements AttributeConverter<List<String>, String> {
-
-        @Override
-        public String convertToDatabaseColumn(List<String> attribute) {
-            if (attribute == null || attribute.isEmpty()) {
-                return "";
-            }
-            return StringUtils.join(attribute, ',');
-        }
-
-        @Override
-        public List<String> convertToEntityAttribute(String dbData) {
-            if (dbData == null || dbData.trim().length() == 0) {
-                return new ArrayList<String>();
-            }
-
-            String[] data = dbData.split(",");
-            return Arrays.asList(data);
-        }
     }
 }

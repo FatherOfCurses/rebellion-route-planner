@@ -34,8 +34,7 @@ public class EntityHelper {
     }
 
     public UserEntity createCargoCustomer() {
-        UserEntity cargoCustomer = new UserEntity();
-        cargoCustomer = UserEntity.builder()
+        return UserEntity.builder()
                 .id(UUID.randomUUID())
                 .firstname("Jabba")
                 .lastname("The Hutt")
@@ -43,7 +42,17 @@ public class EntityHelper {
                 .username("jabbaH")
                 .email("jabba@huttcartel.com")
                 .build();
-        return cargoCustomer;
+    }
+
+    public UserEntity createShipOwner() {
+        return UserEntity.builder()
+                .id(UUID.randomUUID())
+                .firstname("Lando")
+                .lastname("Calrissian")
+                .usertype("owner")
+                .username("colt45")
+                .email("sabbacpro@bespin.com")
+                .build();
     }
 
     public UserEntity createPassenger() {
@@ -78,35 +87,93 @@ public class EntityHelper {
                 .build();
     }
 
-    public RouteEntity createRoute() {
+    public RouteEntity createRouteEntity() {
+        SpaceportEntity mosEisley = createSpaceport();
+        SpaceportEntity alderaan = createSpaceport();
+        SpaceportEntity bamboozle = createSpaceport();
+        List<SpaceportEntity> waypoints = new ArrayList<>();
+        waypoints.add(bamboozle);
         return RouteEntity.builder()
                 .id(UUID.randomUUID())
-                .build();
-    }
-
-    public CargoEntity createCargoEntity() {
-        return CargoEntity.builder()
-                .id(UUID.randomUUID())
+                .originPort(mosEisley)
+                .destinationPort(alderaan)
+                .waypoints(waypoints)
+                .length(283772)
+                .leglengthminium(23892)
                 .build();
     }
 
     public ShipEntity createShipEntity() {
+        UserEntity shipOwner = createShipOwner();
         return ShipEntity.builder()
-                .id(UUID.randomUUID())
+                .shipId(UUID.randomUUID())
                 .shipcapacity(50000)
                 .shipname("Razor Crest")
                 .shiprange(782999)
                 .shipsize("medium")
                 .shiptype("freighter")
+                .shipOwner(shipOwner)
                 .build();
     }
 
-    public BookingEntity createNookingEntity() {
+    public BookingEntity createPassengerBookingEntity() {
         return BookingEntity.builder()
-                .trip(new TripEntity())
+                .id(UUID.randomUUID())
+                .route(createRouteEntity())
                 .bookingtype("passenger")
                 .datebooked(Date.valueOf(LocalDate.now()))
                 .status("confirmed")
+                .build();
+    }
+
+    public BookingEntity createPCargpBookingEntity() {
+        return BookingEntity.builder()
+                .id(UUID.randomUUID())
+                .route(createRouteEntity())
+                .bookingtype("cargo")
+                .datebooked(Date.valueOf(LocalDate.now()))
+                .status("confirmed")
+                .build();
+    }
+
+    public PilotEntity createPilotEntity() {
+        UserEntity pilotUser = UserEntity.builder()
+                .id(UUID.randomUUID())
+                .firstname("Han")
+                .lastname("Solo")
+                .usertype("pilot")
+                .username("kesselRunner")
+                .email("hansolo@corellian.com")
+                .build();
+        return PilotEntity.builder()
+                .id(UUID.randomUUID())
+                .user(pilotUser)
+                .rating("freight")
+                .standing("valid")
+                .homePort(createSpaceport())
+                .currentPort(createSpaceport())
+                .build();
+
+    }
+
+    public TripEntity createTripEntity() {
+        RouteEntity route = createRouteEntity();
+        ShipEntity ship = createShipEntity();
+        PilotEntity pilot = createPilotEntity();
+        BookingEntity booking1 = createPassengerBookingEntity();
+        BookingEntity booking2 = createPCargpBookingEntity();
+        List<BookingEntity> bookingManifest = new ArrayList<BookingEntity>();
+        bookingManifest.add(booking1);
+        bookingManifest.add(booking2);
+
+        return TripEntity.builder()
+                .routeid(route.getId())
+                .shipid(ship.getShipId())
+                .pilotid(pilot.getId())
+                .bookings(bookingManifest)
+                .departurescheduled(Date.valueOf(LocalDate.now()))
+                .arrivalscheduled(Date.valueOf(LocalDate.now()))
+                .tripstatus("scheduled")
                 .build();
     }
 }

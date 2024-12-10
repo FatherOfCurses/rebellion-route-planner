@@ -11,7 +11,7 @@ import java.util.UUID;
 @Entity
 @Builder
 @NoArgsConstructor
-@Table(name = "cargo", schema = "public", catalog = "routemapper")
+@Table(name = "cargo", schema = "public")
 public class CargoEntity {
     @Id
     @GeneratedValue(generator = "UUID")

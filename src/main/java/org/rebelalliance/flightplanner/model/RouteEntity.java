@@ -19,9 +19,9 @@ public class RouteEntity {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", nullable = false)
     private UUID id;
-    @OneToOne
+    @OneToOne(targetEntity = SpaceportEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private SpaceportEntity originPort;
-    @OneToOne
+    @OneToOne(targetEntity = SpaceportEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private SpaceportEntity destinationPort;
     @OneToMany(targetEntity = SpaceportEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @Column(name = "waypointid", nullable = true)

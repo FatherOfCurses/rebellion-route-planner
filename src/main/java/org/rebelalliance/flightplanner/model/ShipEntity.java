@@ -14,8 +14,8 @@ import java.util.UUID;
 @Table(name = "ship", schema = "public", catalog = "routemapper")
 public class ShipEntity {
     @Id
-    @Column(name = "id", nullable = false)
-    private UUID id;
+    @Column(name = "ship_id", nullable = false)
+    private UUID shipId;
     @Basic
     @Column(name = "shipname", nullable = false, length = -1)
     private String shipname;
@@ -31,22 +31,25 @@ public class ShipEntity {
     @Basic
     @Column(name = "shipcapacity", nullable = false)
     private Integer shipcapacity;
+    @ManyToOne
+    private UserEntity shipOwner;
 
-    public ShipEntity(UUID id, String shipname, Integer shiprange, String shiptype, String shipsize, Integer shipcapacity) {
-        this.id = id;
+    public ShipEntity(UUID shipId, String shipname, Integer shiprange, String shiptype, String shipsize, Integer shipcapacity, UserEntity shipOwner) {
+        this.shipId = shipId;
         this.shipname = shipname;
         this.shiprange = shiprange;
         this.shiptype = shiptype;
         this.shipsize = shipsize;
         this.shipcapacity = shipcapacity;
+        this.shipOwner = shipOwner;
     }
 
-    public UUID getId() {
-        return id;
+    public UUID getShipId() {
+        return shipId;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setShipId(UUID shipId) {
+        this.shipId = shipId;
     }
 
     public String getShipname() {
@@ -89,18 +92,24 @@ public class ShipEntity {
         this.shipcapacity = shipcapacity;
     }
 
+    public UserEntity getShipOwner() {
+        return shipOwner;
+    }
+
+    public void setShipOwner(UserEntity shipOwner) {
+        this.shipOwner = shipOwner;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ShipEntity that = (ShipEntity) o;
-        return Objects.equals(getId(), that.getId()) && Objects.equals(getShipname(), that.getShipname()) && Objects.equals(getShiprange(), that.getShiprange()) && Objects.equals(getShiptype(), that.getShiptype()) && Objects.equals(getShipsize(), that.getShipsize()) && Objects.equals(getShipcapacity(), that.getShipcapacity());
+        return Objects.equals(getShipId(), that.getShipId()) && Objects.equals(getShipname(), that.getShipname()) && Objects.equals(getShiprange(), that.getShiprange()) && Objects.equals(getShiptype(), that.getShiptype()) && Objects.equals(getShipsize(), that.getShipsize()) && Objects.equals(getShipcapacity(), that.getShipcapacity()) && Objects.equals(getShipOwner(), that.getShipOwner());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getShipname(), getShiprange(), getShiptype(), getShipsize(), getShipcapacity());
+        return Objects.hash(getShipId(), getShipname(), getShiprange(), getShiptype(), getShipsize(), getShipcapacity(), getShipOwner());
     }
-
-
 }
