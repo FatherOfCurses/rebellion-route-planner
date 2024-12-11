@@ -29,7 +29,7 @@ public class PilotEntity {
     @OneToOne
     private SpaceportEntity homePort;
     @OneToOne
-    private SpaceportEntity  currentPort;
+    private SpaceportEntity currentPort;
 
     public PilotEntity(UUID id, UserEntity user, String rating, String standing, SpaceportEntity homePort, SpaceportEntity currentPort) {
         this.id = id;
