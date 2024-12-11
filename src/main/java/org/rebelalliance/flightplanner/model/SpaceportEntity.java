@@ -13,7 +13,6 @@ import java.util.UUID;
 @Entity
 @Data
 @Builder
-/*@NoArgsConstructor*/
 @AllArgsConstructor
 @EqualsAndHashCode
 @Table(name = "spaceport", schema = "public")
