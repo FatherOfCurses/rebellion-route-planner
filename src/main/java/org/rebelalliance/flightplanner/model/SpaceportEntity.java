@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
+// TODO: Do I need a restrictions object (i.e. no hazardous cargo, no civilians, etc)
 @Entity
 @Data
 @Builder
