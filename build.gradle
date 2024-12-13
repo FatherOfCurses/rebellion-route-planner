@@ -4,16 +4,14 @@
  * This project uses @Incubating APIs which are subject to change.
  */
 
+
+
 plugins {
     id 'java-library'
-    id 'maven-publish'
 }
 
 repositories {
-    mavenLocal()
-    maven {
-        url = uri('https://repo.maven.apache.org/maven2/')
-    }
+    mavenCentral()
 }
 
 dependencies {
@@ -33,7 +31,7 @@ dependencies {
     runtimeOnly 'org.springframework.boot:spring-boot-devtools:2.6.7'
     runtimeOnly 'org.postgresql:postgresql:42.3.4'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.7'
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
     testImplementation 'org.mockito:mockito-core:5.5.0'
     testImplementation 'org.projectlombok:lombok:1.18.26'
     compileOnly 'org.projectlombok:lombok:1.18.26'
@@ -45,14 +43,6 @@ version = '0.0.1-SNAPSHOT'
 description = 'flight-planner'
 java.sourceCompatibility = JavaVersion.VERSION_16
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from(components.java)
-        }
-    }
-}
-
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
@@ -60,3 +50,8 @@ tasks.withType(JavaCompile) {
 tasks.withType(Javadoc) {
     options.encoding = 'UTF-8'
 }
+
+tasks.test {
+    useJUnitPlatform()
+}
+
