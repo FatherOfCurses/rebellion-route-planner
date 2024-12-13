@@ -1,9 +1,6 @@
 package org.rebelalliance.flightplanner.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -13,6 +10,7 @@ import java.util.UUID;
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode
 @Table(name = "cargo", schema = "public")
 public class CargoEntity {
@@ -36,3 +34,5 @@ public class CargoEntity {
     @Column(name = "timesensitive", nullable = false)
     private Boolean timesensitive;
 }
+
+//TODO: How to resolve No Args and All Args constructors
