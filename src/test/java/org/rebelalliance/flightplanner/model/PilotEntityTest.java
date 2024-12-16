@@ -67,7 +67,7 @@ class PilotEntityTest {
         UserEntity mockUser = mock(UserEntity.class);
         SpaceportEntity mockHomePort = mock(SpaceportEntity.class);
         SpaceportEntity mockCurrentPort = mock(SpaceportEntity.class);
-        String rating = "A";
+        String rating = "A+";
         String standing = "Excellent";
 
         PilotEntity pilot1 = new PilotEntity(mockId, mockUser, rating, standing, mockHomePort, mockCurrentPort);

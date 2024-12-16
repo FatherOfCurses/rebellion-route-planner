@@ -1,9 +1,6 @@
 package org.rebelalliance.flightplanner.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -13,8 +10,9 @@ import java.util.UUID;
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode
-@Table(name = "pilot", schema = "public", catalog = "routemapper")
+@Table(name = "pilot", schema = "public")
 public class PilotEntity {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -29,8 +27,8 @@ public class PilotEntity {
     @Basic
     @Column(name = "standing", nullable = false, length = -1)
     private String standing;
-    @OneToOne
+    @ManyToOne
     private SpaceportEntity homePort;
-    @OneToOne
+    @ManyToOne
     private SpaceportEntity currentPort;
 }

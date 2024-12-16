@@ -1,38 +1,46 @@
 package org.rebelalliance.flightplanner.service.impl;
 
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.rebelalliance.flightplanner.model.TripEntity;
 import org.rebelalliance.flightplanner.repositories.TripRepository;
 import org.rebelalliance.flightplanner.service.TripService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
+@Slf4j
 public class TripServiceImpl implements TripService {
 
-    @Autowired
     private TripRepository tripRepository;
 
+    public TripServiceImpl(TripRepository tripRepository) {
+        this.tripRepository = tripRepository;
+    }
+
     @Override
-    public TripEntity Post(TripEntity params) {
-        tripRepository .save(params);
+    public TripEntity createTrip(TripEntity params) {
+        tripRepository.save(params);
         return params;
     }
 
     @Override
-    public List<TripEntity> Get() {
+    public List<TripEntity> getAllTrips() {
         return tripRepository.findAll();
     }
 
     @Override
-    public TripEntity Get(UUID id) {
+    public TripEntity getTripById(UUID id) {
         return tripRepository.getById(id);
     }
 
     @Override
-    public TripEntity Update(TripEntity params, UUID id) {
+    public TripEntity updateTrip(TripEntity params, UUID id) {
         TripEntity trip = tripRepository.getById(id);
         trip.setRouteid(params.getRouteid());
         trip.setShipid(params.getShipid());
@@ -46,8 +54,7 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public String Delete(UUID id) {
+    public void deleteTrip(UUID id) {
         tripRepository.deleteById(id);
-        return "Trip(" + id + ")" + " has been deleted";
     }
 }

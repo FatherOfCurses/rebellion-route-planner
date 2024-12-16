@@ -8,13 +8,13 @@ import java.util.UUID;
 
 @Component
 public interface TripService {
-    TripEntity Post(TripEntity params);
+    TripEntity createTrip(TripEntity params);
 
-    List<TripEntity> Get();
+    List<TripEntity> getAllTrips();
 
-    TripEntity Get(UUID id);
+    TripEntity getTripById(UUID id);
 
-    TripEntity Update(TripEntity params, UUID id);
+    TripEntity updateTrip(TripEntity params, UUID id);
 
-    String Delete(UUID id);
+    void deleteTrip(UUID id);
 }
