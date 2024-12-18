@@ -38,6 +38,8 @@ class PilotServiceImplTest {
     void testGetPilotById() {
         UUID id = UUID.randomUUID();
         PilotEntity pilot = new PilotEntity();
+
+        when(pilotRepository.existsById(id)).thenReturn(true);
         when(pilotRepository.findById(id)).thenReturn(Optional.of(pilot));
 
         Optional<PilotEntity> result = pilotService.getPilotById(id);
@@ -75,6 +77,7 @@ class PilotServiceImplTest {
 
         // Mock repository behavior
         when(pilotRepository.getById(id)).thenReturn(existingPilot);
+        when(pilotRepository.existsById(id)).thenReturn(true);
         when(pilotRepository.save(any(PilotEntity.class))).thenReturn(existingPilot);
 
         // Call the service method

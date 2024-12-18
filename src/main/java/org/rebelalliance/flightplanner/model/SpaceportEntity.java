@@ -45,7 +45,8 @@ public class SpaceportEntity {
     @Column(name = "portsize", nullable = false)
     private String spaceportSize;
 
-    @Basic
+    @ElementCollection
+    @CollectionTable(name = "spaceport_facilities", joinColumns = @JoinColumn(name = "spaceport_id"))
     @Column(name = "facilities", nullable = false)
     private List<String> facilities;
 

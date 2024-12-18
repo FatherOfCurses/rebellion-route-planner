@@ -32,7 +32,7 @@ class SpaceportEntityTest {
 
         // Assert values
 
-        assertEquals("Galactic Hub", spaceport.getSpaceportName());
+        assertEquals("Port A", spaceport.getSpaceportName());
         assertEquals("Large", spaceport.getSpaceportSize());
         assertEquals(100, spaceport.getLocationX());
         assertEquals(200, spaceport.getLocationY());
@@ -43,10 +43,10 @@ class SpaceportEntityTest {
     @Test
     void testEqualsAndHashCode() {
         UUID id1 = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
+        UUID id3 = UUID.randomUUID();
 
         SpaceportEntity spaceport1 = SpaceportEntity.builder()
-                .id(UUID.randomUUID())
+                .id(id1)
                 .civilianResidents(null)
                 .civilianVisitors(null)
                 .pilotResidents(null)
@@ -61,7 +61,7 @@ class SpaceportEntityTest {
                 .build();
 
         SpaceportEntity spaceport2 = SpaceportEntity.builder()
-                .id(UUID.randomUUID())
+                .id(id1)
                 .civilianResidents(null)
                 .civilianVisitors(null)
                 .pilotResidents(null)
@@ -76,7 +76,7 @@ class SpaceportEntityTest {
                 .build();
 
         SpaceportEntity spaceport3 = SpaceportEntity.builder()
-                .id(UUID.randomUUID())
+                .id(id3)
                 .civilianResidents(null)
                 .civilianVisitors(null)
                 .pilotResidents(null)

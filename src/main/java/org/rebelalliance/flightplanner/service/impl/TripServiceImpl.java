@@ -1,6 +1,5 @@
 package org.rebelalliance.flightplanner.service.impl;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.rebelalliance.flightplanner.model.TripEntity;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class TripServiceImpl implements TripService {

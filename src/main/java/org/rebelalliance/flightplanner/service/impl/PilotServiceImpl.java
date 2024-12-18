@@ -1,6 +1,5 @@
 package org.rebelalliance.flightplanner.service.impl;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.rebelalliance.flightplanner.model.PilotEntity;
@@ -13,7 +12,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class PilotServiceImpl implements PilotService {

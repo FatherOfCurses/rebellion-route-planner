@@ -8,6 +8,7 @@
 
 plugins {
     id 'java-library'
+    id 'jacoco'
 }
 
 repositories {
@@ -15,22 +16,22 @@ repositories {
 }
 
 dependencies {
-    api 'org.springframework.boot:spring-boot-starter-data-jpa:2.6.7'
-    api 'org.springframework.boot:spring-boot-starter-oauth2-client:2.6.7'
-    api 'org.springframework.boot:spring-boot-starter-web:2.6.7'
+    api 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.5'
+    api 'org.springframework.boot:spring-boot-starter-oauth2-client:2.7.5'
+    api 'org.springframework.boot:spring-boot-starter-web:2.7.5'
     api 'org.springframework.session:spring-session-core:2.6.3'
     api 'org.springframework:spring-test:5.3.19'
     api 'org.springframework.data:spring-data-jpa:2.6.4'
     api 'com.fasterxml.uuid:java-uuid-generator:4.0.1'
-    api 'com.h2database:h2:1.4.200'
-    api 'org.hibernate.orm:hibernate-core:6.1.6.Final'
+    api 'com.h2database:h2:2.2.220'
+    api 'org.hibernate.orm:hibernate-core:5.6.14.Final'
     api 'org.hibernate.orm:hibernate-java8:6.0.0.Alpha7'
     api 'org.projectlombok:lombok:1.18.24'
     api 'javax.xml.bind:jaxb-api:2.3.1'
     api 'javax.persistence:javax.persistence-api:2.2'
     runtimeOnly 'org.springframework.boot:spring-boot-devtools:2.6.7'
-    runtimeOnly 'org.postgresql:postgresql:42.3.4'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.7'
+    runtimeOnly 'org.postgresql:postgresql:42.7.2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.5'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
     testImplementation 'org.mockito:mockito-core:5.5.0'
     testImplementation 'org.projectlombok:lombok:1.18.26'
@@ -55,3 +56,9 @@ tasks.test {
     useJUnitPlatform()
 }
 
+jacocoTestReport {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
