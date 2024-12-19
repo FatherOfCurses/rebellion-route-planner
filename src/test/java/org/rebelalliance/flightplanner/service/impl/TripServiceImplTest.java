@@ -4,8 +4,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.rebelalliance.flightplanner.model.TripEntity;
+import org.rebelalliance.flightplanner.model.helper.TestObjectBuilder;
 import org.rebelalliance.flightplanner.repositories.TripRepository;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,6 +21,9 @@ class TripServiceImplTest {
     private TripRepository tripRepository;
     private TripServiceImpl tripService;
 
+    LocalDateTime departureTime = TestObjectBuilder.returnFixedDate();
+    UUID tripId = TestObjectBuilder.returnFixedId();
+
     @BeforeEach
     void setUp() {
         tripRepository = Mockito.mock(TripRepository.class);
@@ -26,7 +32,7 @@ class TripServiceImplTest {
 
     @Test
     void testCreateTrip() {
-        TripEntity trip = new TripEntity();
+        TripEntity trip = TestObjectBuilder.createTestTrip();
         when(tripRepository.save(trip)).thenReturn(trip);
 
         TripEntity result = tripService.createTrip(trip);
@@ -37,13 +43,13 @@ class TripServiceImplTest {
 
     @Test
     void testGetTripById() {
-        UUID id = UUID.randomUUID();
-        TripEntity trip = new TripEntity();
+        UUID id = tripId;
+        TripEntity trip = TestObjectBuilder.createTestTrip();
 
         when(tripRepository.existsById(id)).thenReturn(true);
         when(tripRepository.getById(id)).thenReturn(trip);
 
-        Optional<TripEntity> result = tripService.getTripById(id);
+        TripEntity result = tripService.getTripById(id);
 
         assertNotNull(result);
         assertEquals(trip, result);
@@ -52,7 +58,7 @@ class TripServiceImplTest {
 
     @Test
     void testGetAllTrips() {
-        List<TripEntity> trips = List.of(new TripEntity(), new TripEntity());
+        List<TripEntity> trips = List.of(TestObjectBuilder.createTestTrip(), TestObjectBuilder.createTestTrip());
         when(tripRepository.findAll()).thenReturn(trips);
 
         List<TripEntity> result = tripService.getAllTrips();
@@ -64,61 +70,62 @@ class TripServiceImplTest {
     @Test
     void testUpdateTrip_Success() {
         // Prepare test data
-        UUID id = UUID.randomUUID();
-        TripEntity existingTrip = new TripEntity();
-        existingTrip.setRouteid(UUID.randomUUID());
+        UUID id = tripId;
+        TripEntity existingTrip = TestObjectBuilder.createTestTrip();
 
-        TripEntity params = new TripEntity();
-        params.setRouteid(UUID.randomUUID());
-        params.setShipid(UUID.randomUUID());
-        params.setDeparturescheduled(new java.sql.Date(System.currentTimeMillis()));
-        params.setArrivalscheduled(new java.sql.Date(System.currentTimeMillis() + 3600000));
+        TripEntity updatedTrip = TestObjectBuilder.createTestTrip();
+        updatedTrip.setRouteid(id);
+        updatedTrip.setShipid(id);
+        updatedTrip.setPilotid(id);
+        updatedTrip.setBookings(Collections.emptyList());
+        updatedTrip.setDeparturescheduled(departureTime);
+        updatedTrip.setArrivalscheduled(departureTime.plusHours(3));
+        updatedTrip.setArrivalactual(departureTime.plusMinutes(30));
+        updatedTrip.setDepartureactual(departureTime.plusHours(4));
 
-        when(tripRepository.existsById(id)).thenReturn(true);
-        when(tripRepository.getById(id)).thenReturn(existingTrip);
+        when(tripRepository.findById(id)).thenReturn(Optional.of(existingTrip));
         when(tripRepository.save(existingTrip)).thenReturn(existingTrip);
 
         // Call the method
-        TripEntity result = tripService.updateTrip(id, params);
+        TripEntity result = tripService.updateTrip(id, updatedTrip);
 
         // Assertions
         assertNotNull(result);
-        assertEquals(params.getRouteid(), result.getRouteid());
-        assertEquals(params.getShipid(), result.getShipid());
-        assertEquals(params.getDeparturescheduled(), result.getDeparturescheduled());
-        assertEquals(params.getArrivalscheduled(), result.getArrivalscheduled());
+        assertEquals(updatedTrip.getRouteid(), result.getRouteid());
+        assertEquals(updatedTrip.getShipid(), result.getShipid());
+        assertEquals(updatedTrip.getDeparturescheduled(), result.getDeparturescheduled());
+        assertEquals(updatedTrip.getArrivalscheduled(), result.getArrivalscheduled());
 
         // Verify interactions
-        verify(tripRepository, times(1)).existsById(id);
-        verify(tripRepository, times(1)).getById(id);
+        verify(tripRepository, times(1)).findById(id);
         verify(tripRepository, times(1)).save(existingTrip);
     }
 
     @Test
     void testUpdateTrip_TripNotFound() {
         // Prepare test data
-        UUID id = UUID.randomUUID();
-        TripEntity params = new TripEntity();
+        UUID id = tripId;
+        TripEntity updatedTrip = TestObjectBuilder.createTestTrip();
 
         when(tripRepository.existsById(id)).thenReturn(false);
 
         // Call the method and expect an exception
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            tripService.updateTrip(id, params);
+            tripService.updateTrip(id, updatedTrip);
         });
 
         // Assertions
         assertEquals("Trip not found with ID: " + id, exception.getMessage());
 
         // Verify interactions
-        verify(tripRepository, times(1)).existsById(id);
+        verify(tripRepository, times(1)).findById(id);
         verify(tripRepository, never()).getById(any());
         verify(tripRepository, never()).save(any());
     }
 
     @Test
     void deleteTrip() {
-        UUID id = UUID.randomUUID();
+        UUID id = tripId;
 
         when(tripRepository.existsById(id)).thenReturn(true);
         tripService.deleteTrip(id);
@@ -128,7 +135,7 @@ class TripServiceImplTest {
 
     @Test
     void testDeleteTripNotFound() {
-        UUID id = UUID.randomUUID();
+        UUID id = tripId;
 
         when(tripRepository.existsById(id)).thenReturn(false);
 

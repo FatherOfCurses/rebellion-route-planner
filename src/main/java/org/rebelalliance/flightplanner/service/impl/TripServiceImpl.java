@@ -8,7 +8,6 @@ import org.rebelalliance.flightplanner.service.TripService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -29,9 +28,9 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public Optional<TripEntity> getTripById(UUID id) {
+    public TripEntity getTripById(UUID id) {
         if (tripRepository.existsById(id)) {
-            return tripRepository.findById(id);
+            return tripRepository.getById(id);
         } else {
             throw new IllegalArgumentException("Trip not found with ID: " + id);
         }
@@ -45,14 +44,14 @@ public class TripServiceImpl implements TripService {
     @Override
     public TripEntity updateTrip(UUID id, TripEntity trip) {
         return tripRepository.findById(id).map(existingTrip -> {
-            trip.setRouteid(trip.getRouteid());
-            trip.setShipid(trip.getShipid());
-            trip.setPilotid(trip.getPilotid());
-            trip.setBookings(trip.getBookings());
-            trip.setDeparturescheduled(trip.getDeparturescheduled());
-            trip.setArrivalscheduled(trip.getArrivalscheduled());
-            trip.setDepartureactual(trip.getDepartureactual());
-            trip.setArrivalactual(trip.getArrivalactual());
+            existingTrip.setRouteid(trip.getRouteid());
+            existingTrip.setShipid(trip.getShipid());
+            existingTrip.setPilotid(trip.getPilotid());
+            existingTrip.setBookings(trip.getBookings());
+            existingTrip.setDeparturescheduled(trip.getDeparturescheduled());
+            existingTrip.setArrivalscheduled(trip.getArrivalscheduled());
+            existingTrip.setDepartureactual(trip.getDepartureactual());
+            existingTrip.setArrivalactual(trip.getArrivalactual());
             return tripRepository.save(trip);
         }).orElseThrow(() -> new IllegalArgumentException("Trip not found with ID: " + id));
     }

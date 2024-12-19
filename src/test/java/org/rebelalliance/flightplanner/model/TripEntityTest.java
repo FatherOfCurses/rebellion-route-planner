@@ -1,8 +1,9 @@
 package org.rebelalliance.flightplanner.model;
 
 import org.junit.jupiter.api.Test;
+import org.rebelalliance.flightplanner.model.helper.TestObjectBuilder;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -11,18 +12,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TripEntityTest {
 
+    LocalDateTime departureTime = TestObjectBuilder.returnFixedDate();
+    UUID testId = TestObjectBuilder.returnFixedId();
+
     @Test
     void testGettersAndSetters() {
         // Mock dependencies
-        UUID id = UUID.randomUUID();
-        UUID routeId = UUID.randomUUID();
-        UUID shipId = UUID.randomUUID();
-        UUID pilotId = UUID.randomUUID();
+        UUID id = testId;
+        UUID routeId = testId;
+        UUID shipId = testId;
+        UUID pilotId = testId;
         List<BookingEntity> bookings = Collections.emptyList();
-        Date departureScheduled = new Date(System.currentTimeMillis());
-        Date arrivalScheduled = new Date(System.currentTimeMillis() + 3600000);
-        Date departureActual = new Date(System.currentTimeMillis());
-        Date arrivalActual = new Date(System.currentTimeMillis() + 7200000);
+        LocalDateTime departureScheduled = departureTime;
+        LocalDateTime arrivalScheduled = departureTime.plusHours(3);
+        LocalDateTime departureActual = departureTime.plusMinutes(30);
+        LocalDateTime arrivalActual = departureTime.plusHours(4);
         String tripStatus = "Scheduled";
 
         // Create a TripEntity instance
@@ -47,30 +51,19 @@ class TripEntityTest {
     @Test
     void testBuilder() {
         // Mock dependencies
-        UUID id = UUID.randomUUID();
-        UUID routeId = UUID.randomUUID();
-        UUID shipId = UUID.randomUUID();
-        UUID pilotId = UUID.randomUUID();
+        UUID id = testId;
+        UUID routeId = testId;
+        UUID shipId = testId;
+        UUID pilotId = testId;
         List<BookingEntity> bookings = Collections.emptyList();
-        Date departureScheduled = new Date(System.currentTimeMillis());
-        Date arrivalScheduled = new Date(System.currentTimeMillis() + 3600000);
-        Date departureActual = new Date(System.currentTimeMillis());
-        Date arrivalActual = new Date(System.currentTimeMillis() + 7200000);
+        LocalDateTime departureScheduled = departureTime;
+        LocalDateTime arrivalScheduled = departureTime.plusHours(3);
+        LocalDateTime departureActual = departureTime.plusMinutes(30);
+        LocalDateTime arrivalActual = departureTime.plusHours(4);
         String tripStatus = "Completed";
 
         // Create an instance using the builder
-        TripEntity trip = TripEntity.builder()
-                .id(id)
-                .routeid(routeId)
-                .shipid(shipId)
-                .pilotid(pilotId)
-                .bookings(bookings)
-                .departurescheduled(departureScheduled)
-                .arrivalscheduled(arrivalScheduled)
-                .departureactual(departureActual)
-                .arrivalactual(arrivalActual)
-                .tripstatus(tripStatus)
-                .build();
+        TripEntity trip = TestObjectBuilder.createTestTrip();
 
         // Assert values using getters
         assertEquals(id, trip.getId());
@@ -88,15 +81,15 @@ class TripEntityTest {
     @Test
     void testEqualsAndHashCode() {
         // Create two instances with the same data
-        UUID id = UUID.randomUUID();
-        UUID routeId = UUID.randomUUID();
-        UUID shipId = UUID.randomUUID();
-        UUID pilotId = UUID.randomUUID();
+        UUID id = testId;
+        UUID routeId = testId;
+        UUID shipId = testId;
+        UUID pilotId = testId;
         List<BookingEntity> bookings = Collections.emptyList();
-        Date departureScheduled = new Date(System.currentTimeMillis());
-        Date arrivalScheduled = new Date(System.currentTimeMillis() + 3600000);
-        Date departureActual = new Date(System.currentTimeMillis());
-        Date arrivalActual = new Date(System.currentTimeMillis() + 7200000);
+        LocalDateTime departureScheduled = departureTime;
+        LocalDateTime arrivalScheduled = departureTime.plusHours(3);
+        LocalDateTime departureActual = departureTime.plusMinutes(30);
+        LocalDateTime arrivalActual = departureTime.plusHours(4);
         String tripStatus = "Active";
 
         TripEntity trip1 = new TripEntity(id, routeId, shipId, pilotId, bookings, departureScheduled, arrivalScheduled, departureActual, arrivalActual, tripStatus);
@@ -107,7 +100,7 @@ class TripEntityTest {
         assertEquals(trip1.hashCode(), trip2.hashCode());
 
         // Create a different instance
-        TripEntity trip3 = new TripEntity(UUID.randomUUID(), routeId, shipId, pilotId, bookings, departureScheduled, arrivalScheduled, departureActual, arrivalActual, "Canceled");
+        TripEntity trip3 = new TripEntity(testId, routeId, shipId, pilotId, bookings, departureScheduled, arrivalScheduled, departureActual, arrivalActual, "Canceled");
 
         // Assert inequality
         assertNotEquals(trip1, trip3);
@@ -118,7 +111,7 @@ class TripEntityTest {
     void testToString() {
         // Create an instance
         TripEntity trip = TripEntity.builder()
-                .id(UUID.randomUUID())
+                .id(testId)
                 .tripstatus("In Progress")
                 .build();
 

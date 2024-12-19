@@ -23,6 +23,8 @@ class BookingServiceImplTest {
     private BookingRepository bookingRepository;
     private BookingServiceImpl bookingService;
 
+    UUID bookingId = TestObjectBuilder.returnFixedId();
+
     @BeforeEach
     void setUp() {
         bookingRepository = Mockito.mock(BookingRepository.class);
@@ -42,7 +44,7 @@ class BookingServiceImplTest {
 
     @Test
     void getBookingById() {
-        UUID id = UUID.randomUUID();
+        UUID id = bookingId;
         BookingEntity booking = new BookingEntity();
         booking.setId(id);
 
@@ -117,7 +119,7 @@ class BookingServiceImplTest {
         updatedBooking.setCargo(updatedCargo);
         updatedBooking.setCustomer(updatedUser);
         updatedBooking.setBookingtype("New Type");
-        updatedBooking.setDatebooked(new java.sql.Date(System.currentTimeMillis()));
+        updatedBooking.setDatebooked(TestObjectBuilder.returnFixedDate());
 
         // Mock repository behavior
         when(bookingRepository.findById(id)).thenReturn(Optional.of(existingBooking));

@@ -39,7 +39,6 @@ public class PilotServiceImpl implements PilotService {
     @Override
     public PilotEntity updatePilot(UUID id, PilotEntity pilot) {
         return pilotRepository.findById(id).map(existingPilot -> {
-            existingPilot.setId(pilot.getId());
             existingPilot.setUser(pilot.getUser());
             existingPilot.setRating(pilot.getRating());
             existingPilot.setStanding(pilot.getStanding());

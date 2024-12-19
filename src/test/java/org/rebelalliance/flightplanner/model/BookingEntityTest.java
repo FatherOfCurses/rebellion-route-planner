@@ -3,7 +3,7 @@ package org.rebelalliance.flightplanner.model;
 import org.junit.jupiter.api.Test;
 import org.rebelalliance.flightplanner.model.helper.TestObjectBuilder;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,7 +12,7 @@ import static org.mockito.Mockito.mock;
 class BookingEntityTest {
 
     UUID staticUUID = TestObjectBuilder.returnFixedId();
-    Date staticDate = TestObjectBuilder.returnFixedDate();
+    LocalDateTime staticDate = TestObjectBuilder.returnFixedDate();
 
 
     @Test
@@ -23,7 +23,7 @@ class BookingEntityTest {
         CargoEntity mockCargo = mock(CargoEntity.class);
         UserEntity mockCustomer = mock(UserEntity.class);
         String bookingType = "VIP";
-        Date dateBooked = new Date(System.currentTimeMillis());
+        LocalDateTime dateBooked = staticDate;
         String status = "Confirmed";
 
         // Create a BookingEntity instance
@@ -48,7 +48,7 @@ class BookingEntityTest {
         UserEntity mockCustomer = TestObjectBuilder.createTestUser();
         mockCustomer.setUsertype("passenger");
         String bookingType = "Standard";
-        Date dateBooked = staticDate;
+        LocalDateTime dateBooked = staticDate;
         String status = "Final";
 
         // Create an instance using the builder
@@ -72,7 +72,7 @@ class BookingEntityTest {
         CargoEntity mockCargo = mock(CargoEntity.class);
         UserEntity mockCustomer = mock(UserEntity.class);
         String bookingType = "Cargo";
-        Date dateBooked = new Date(System.currentTimeMillis());
+        LocalDateTime dateBooked = TestObjectBuilder.returnFixedDate();
         String status = "Completed";
 
         BookingEntity booking1 = new BookingEntity(mockId, mockRoute, mockCargo, mockCustomer, bookingType, dateBooked, status);

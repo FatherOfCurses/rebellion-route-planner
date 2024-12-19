@@ -8,6 +8,7 @@ import org.rebelalliance.flightplanner.model.helper.TestObjectBuilder;
 import org.rebelalliance.flightplanner.repositories.PilotRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -77,7 +78,7 @@ class PilotServiceImplTest {
         updatedParams.setStanding("Excellent");
 
         // Mock repository behavior
-        when(pilotRepository.getById(id)).thenReturn(existingPilot);
+        when(pilotRepository.findById(id)).thenReturn(Optional.of(existingPilot));
         when(pilotRepository.existsById(id)).thenReturn(true);
         when(pilotRepository.save(any(PilotEntity.class))).thenReturn(existingPilot);
 
@@ -90,7 +91,7 @@ class PilotServiceImplTest {
         assertEquals("Excellent", result.getStanding()); // Validate updated standing
 
         // Verify repository interactions
-        verify(pilotRepository, times(1)).getById(id);
+        verify(pilotRepository, times(1)).findById(id);
         verify(pilotRepository, times(1)).save(existingPilot);
     }
 
@@ -109,7 +110,7 @@ class PilotServiceImplTest {
         });
 
         assertEquals("Pilot not found with ID: " + id, exception.getMessage());
-        verify(pilotRepository, times(1)).existsById(id);
+        verify(pilotRepository, times(1)).findById(id);
         verify(pilotRepository, never()).save(existingPilot);
     }
 
