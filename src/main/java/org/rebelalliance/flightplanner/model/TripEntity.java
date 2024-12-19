@@ -4,7 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,16 +35,16 @@ public class TripEntity {
     private List<BookingEntity> bookings;
     @Basic
     @Column(name = "departurescheduled")
-    private Date departurescheduled;
+    private LocalDateTime departurescheduled;
     @Basic
     @Column(name = "arrivalscheduled")
-    private Date arrivalscheduled;
+    private LocalDateTime arrivalscheduled;
     @Basic
     @Column(name = "departureactual")
-    private Date departureactual;
+    private LocalDateTime departureactual;
     @Basic
     @Column(name = "arrivalactual")
-    private Date arrivalactual;
+    private LocalDateTime arrivalactual;
     @Basic
     @Column(name = "tripstatus")
     private String tripstatus;

@@ -10,10 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UserEntityTest {
 
+    UUID staticUUID = TestObjectBuilder.returnFixedId();
+
     @Test
     void testGettersAndSetters() {
         // Create test data
-        UUID id = UUID.randomUUID();
+        UUID id = staticUUID;
         String firstname = "Luke";
         String lastname = "Skywalker";
         String usertype = "Pilot";
@@ -35,10 +37,10 @@ class UserEntityTest {
     @Test
     void testBuilder() {
         // Create test data
-        UUID id = UUID.randomUUID();
+        UUID id = staticUUID;
         String firstname = "Luke";
         String lastname = "Skywalker";
-        String usertype = "Pilot";
+        String usertype = "";
         String username = "luke.skywalker";
         String email = "luke@rebellion.org";
 
@@ -57,7 +59,7 @@ class UserEntityTest {
     @Test
     void testEqualsAndHashCode() {
         // Create two instances with the same data
-        UUID id = UUID.randomUUID();
+        UUID id = staticUUID;
         String firstname = "Han";
         String lastname = "Solo";
         String usertype = "Smuggler";
@@ -72,7 +74,7 @@ class UserEntityTest {
         assertEquals(user1.hashCode(), user2.hashCode());
 
         // Create a different instance
-        UserEntity user3 = new UserEntity(UUID.randomUUID(), firstname, lastname, usertype, "han.solo77", email);
+        UserEntity user3 = new UserEntity(staticUUID, firstname, lastname, usertype, "han.solo77", email);
 
         // Assert inequality
         assertNotEquals(user1, user3);
@@ -83,7 +85,7 @@ class UserEntityTest {
     void testToString() {
         // Create an instance
         UserEntity user = UserEntity.builder()
-                .id(UUID.randomUUID())
+                .id(staticUUID)
                 .firstname("Yoda")
                 .lastname("Master")
                 .usertype("Jedi")

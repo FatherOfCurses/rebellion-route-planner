@@ -1,6 +1,7 @@
 package org.rebelalliance.flightplanner.model;
 
 import org.junit.jupiter.api.Test;
+import org.rebelalliance.flightplanner.model.helper.TestObjectBuilder;
 
 import java.sql.Date;
 import java.util.UUID;
@@ -10,10 +11,14 @@ import static org.mockito.Mockito.mock;
 
 class BookingEntityTest {
 
+    UUID staticUUID = TestObjectBuilder.returnFixedId();
+    Date staticDate = TestObjectBuilder.returnFixedDate();
+
+
     @Test
     void testGettersAndSetters() {
         // Mock dependencies
-        UUID mockId = UUID.randomUUID();
+        UUID mockId = staticUUID;
         RouteEntity mockRoute = mock(RouteEntity.class);
         CargoEntity mockCargo = mock(CargoEntity.class);
         UserEntity mockCustomer = mock(UserEntity.class);
@@ -37,24 +42,17 @@ class BookingEntityTest {
     @Test
     void testBuilder() {
         // Mock dependencies
-        UUID mockId = UUID.randomUUID();
-        RouteEntity mockRoute = mock(RouteEntity.class);
-        CargoEntity mockCargo = mock(CargoEntity.class);
-        UserEntity mockCustomer = mock(UserEntity.class);
+        UUID mockId = staticUUID;
+        RouteEntity mockRoute = TestObjectBuilder.createTestRoute();
+        CargoEntity mockCargo = TestObjectBuilder.createTestCargo();
+        UserEntity mockCustomer = TestObjectBuilder.createTestUser();
+        mockCustomer.setUsertype("passenger");
         String bookingType = "Standard";
-        Date dateBooked = new Date(System.currentTimeMillis());
-        String status = "Pending";
+        Date dateBooked = staticDate;
+        String status = "Final";
 
         // Create an instance using the builder
-        BookingEntity booking = BookingEntity.builder()
-                .id(mockId)
-                .route(mockRoute)
-                .cargo(mockCargo)
-                .customer(mockCustomer)
-                .bookingtype(bookingType)
-                .datebooked(dateBooked)
-                .status(status)
-                .build();
+        BookingEntity booking = TestObjectBuilder.createTestBooking();
 
         // Assert values using getters
         assertEquals(mockId, booking.getId());

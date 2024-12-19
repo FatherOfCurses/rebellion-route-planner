@@ -2,15 +2,23 @@ package org.rebelalliance.flightplanner.model.helper;
 
 import org.rebelalliance.flightplanner.model.*;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.UUID;
 
 public class TestObjectBuilder {
 
+    public static UUID returnFixedId() {
+        return UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+    }
+
+    public static LocalDateTime returnFixedDate() {
+        return LocalDateTime.of(2024, 12, 31, 0, 0);
+    }
+
     public static UserEntity createTestUser() {
         return UserEntity.builder()
-                .id(UUID.randomUUID())
+                .id(returnFixedId())
                 .firstname("Luke")
                 .lastname("Skywalker")
                 .usertype("")
@@ -21,7 +29,7 @@ public class TestObjectBuilder {
 
     public static SpaceportEntity createTestSpaceport() {
         return SpaceportEntity.builder()
-                .id(UUID.randomUUID())
+                .id(returnFixedId())
                 .spaceportName("Port A")
                 .spaceportSize("Large")
                 .locationX(100)
@@ -38,7 +46,7 @@ public class TestObjectBuilder {
 
     public static PilotEntity createTestPilot() {
         PilotEntity pilot = PilotEntity.builder()
-                .id(UUID.randomUUID())
+                .id(returnFixedId())
                 .user(createTestUser())
                 .rating("A+")
                 .standing("Active")
@@ -51,7 +59,7 @@ public class TestObjectBuilder {
 
     public static CargoEntity createTestCargo() {
         CargoEntity cargo = CargoEntity.builder()
-                .id(UUID.randomUUID())
+                .id(returnFixedId())
                 .customer(createTestUser())
                 .contents("Blue Milk")
                 .mass(800000)
@@ -64,7 +72,7 @@ public class TestObjectBuilder {
 
     public static ShipEntity createTestShip() {
         ShipEntity ship = ShipEntity.builder()
-                .shipId(UUID.randomUUID())
+                .shipId(returnFixedId())
                 .shipname("Razor Crest")
                 .shiprange(47620)
                 .shiptype("Corvette")
@@ -78,7 +86,7 @@ public class TestObjectBuilder {
 
     public static RouteEntity createTestRoute() {
         RouteEntity route = RouteEntity.builder()
-                .id(UUID.randomUUID())
+                .id(returnFixedId())
                 .originPort(createTestSpaceport())
                 .destinationPort(createTestSpaceport())
                 .waypoints(Collections.emptyList())
@@ -91,12 +99,12 @@ public class TestObjectBuilder {
 
     public static BookingEntity createTestBooking() {
         BookingEntity booking = BookingEntity.builder()
-                .id(UUID.randomUUID())
+                .id(returnFixedId())
                 .route(createTestRoute())
                 .cargo(createTestCargo())
                 .customer(createTestUser())
                 .bookingtype("Standard")
-                .datebooked(new Date(System.currentTimeMillis()))
+                .datebooked(returnFixedDate())
                 .status("Final")
                 .build();
         booking.getCustomer().setUsertype("passenger");
@@ -104,16 +112,17 @@ public class TestObjectBuilder {
     }
 
     public static TripEntity createTestTrip() {
+        LocalDateTime departureScheduled = returnFixedDate();
         return TripEntity.builder()
-                .id(UUID.randomUUID())
-                .routeid(UUID.randomUUID())
-                .shipid(UUID.randomUUID())
-                .pilotid(UUID.randomUUID())
+                .id(returnFixedId())
+                .routeid(returnFixedId())
+                .shipid(returnFixedId())
+                .pilotid(returnFixedId())
                 .bookings(Collections.emptyList())
-                .departurescheduled(new Date(System.currentTimeMillis()))
-                .arrivalscheduled(new Date(System.currentTimeMillis() + 360000))
-                .departureactual(new Date(System.currentTimeMillis() + 10000))
-                .arrivalactual(new Date(System.currentTimeMillis() + 720000))
+                .departurescheduled(departureScheduled)
+                .arrivalscheduled(departureScheduled.plusHours(3))
+                .departureactual(departureScheduled.plusMinutes(30))
+                .arrivalactual(departureScheduled.plusHours(4))
                 .tripstatus("Completed")
                 .build();
     }

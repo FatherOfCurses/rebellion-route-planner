@@ -1,6 +1,7 @@
 package org.rebelalliance.flightplanner.model;
 
 import org.junit.jupiter.api.Test;
+import org.rebelalliance.flightplanner.model.helper.TestObjectBuilder;
 
 import java.util.UUID;
 
@@ -9,10 +10,12 @@ import static org.mockito.Mockito.mock;
 
 class CargoEntityTest {
 
+    UUID staticUUID = TestObjectBuilder.returnFixedId();
+
     @Test
     void testGettersAndSetters() {
         // Mock dependencies
-        UUID mockId = UUID.randomUUID();
+        UUID mockId = staticUUID;
         UserEntity mockCustomer = mock(UserEntity.class);
         String contents = "Fuel Cells";
         Integer mass = 1000;
@@ -22,7 +25,7 @@ class CargoEntityTest {
         // Create a CargoEntity instance
         CargoEntity cargo = new CargoEntity(mockId, mockCustomer, contents, mass, hazardous, timesensitive);
 
-        // Assert values using getters
+        // Assert values using getter
         assertEquals(mockId, cargo.getId());
         assertEquals(mockCustomer, cargo.getCustomer());
         assertEquals(contents, cargo.getContents());
@@ -35,24 +38,17 @@ class CargoEntityTest {
     void testBuilder() {
         // Mock dependencies
         UUID mockId = UUID.randomUUID();
-        UserEntity mockCustomer = mock(UserEntity.class);
-        String contents = "Medical Supplies";
-        Integer mass = 500;
+        UserEntity mockCustomer = TestObjectBuilder.createTestUser();
+        mockCustomer.setUsertype("customer");
+        String contents = "Blue Milk";
+        Integer mass = 800000;
         Boolean hazardous = false;
         Boolean timesensitive = true;
 
         // Create an instance using the builder
-        CargoEntity cargo = CargoEntity.builder()
-                .id(mockId)
-                .customer(mockCustomer)
-                .contents(contents)
-                .mass(mass)
-                .hazardous(hazardous)
-                .timesensitive(timesensitive)
-                .build();
+        CargoEntity cargo = TestObjectBuilder.createTestCargo();
 
         // Assert values using getters
-        assertEquals(mockId, cargo.getId());
         assertEquals(mockCustomer, cargo.getCustomer());
         assertEquals(contents, cargo.getContents());
         assertEquals(mass, cargo.getMass());

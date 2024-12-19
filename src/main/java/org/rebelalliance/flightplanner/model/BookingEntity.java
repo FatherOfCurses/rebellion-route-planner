@@ -4,7 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -31,7 +31,7 @@ public class BookingEntity {
     private String bookingtype;
     @Basic
     @Column(name = "datebooked", nullable = false)
-    private Date datebooked;
+    private LocalDateTime datebooked;
     @Basic
     @Column(name = "status", nullable = false, length = -1)
     private String status;

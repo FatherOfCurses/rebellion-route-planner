@@ -4,7 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.rebelalliance.flightplanner.model.BookingEntity;
+import org.rebelalliance.flightplanner.model.CargoEntity;
 import org.rebelalliance.flightplanner.model.RouteEntity;
+import org.rebelalliance.flightplanner.model.UserEntity;
+import org.rebelalliance.flightplanner.model.helper.TestObjectBuilder;
 import org.rebelalliance.flightplanner.repositories.BookingRepository;
 
 import java.util.ArrayList;
@@ -102,15 +105,17 @@ class BookingServiceImplTest {
     void testUpdateBooking_Success() {
         // Prepare test data
         UUID id = UUID.randomUUID();
-        BookingEntity existingBooking = new BookingEntity();
+        BookingEntity existingBooking = TestObjectBuilder.createTestBooking();
         existingBooking.setStatus("Pending");
-        RouteEntity route = new RouteEntity();
 
         BookingEntity updatedBooking = new BookingEntity();
+        RouteEntity updatedRoute = TestObjectBuilder.createTestRoute();
+        CargoEntity updatedCargo = TestObjectBuilder.createTestCargo();
+        UserEntity updatedUser = TestObjectBuilder.createTestUser();
         updatedBooking.setStatus("Confirmed");
-        updatedBooking.setRoute();
-        updatedBooking.setCargo("Updated Cargo");
-        updatedBooking.setCustomer("Updated Customer");
+        updatedBooking.setRoute(updatedRoute);
+        updatedBooking.setCargo(updatedCargo);
+        updatedBooking.setCustomer(updatedUser);
         updatedBooking.setBookingtype("New Type");
         updatedBooking.setDatebooked(new java.sql.Date(System.currentTimeMillis()));
 
@@ -124,9 +129,9 @@ class BookingServiceImplTest {
         // Assertions
         assertNotNull(result);
         assertEquals("Confirmed", result.getStatus());
-        assertEquals("New Route", result.getRoute());
-        assertEquals("Updated Cargo", result.getCargo());
-        assertEquals("Updated Customer", result.getCustomer());
+        assertEquals(updatedRoute, result.getRoute());
+        assertEquals(updatedCargo, result.getCargo());
+        assertEquals(updatedUser, result.getCustomer());
         assertEquals("New Type", result.getBookingtype());
 
         // Verify interactions

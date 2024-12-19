@@ -4,10 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.rebelalliance.flightplanner.model.PilotEntity;
+import org.rebelalliance.flightplanner.model.helper.TestObjectBuilder;
 import org.rebelalliance.flightplanner.repositories.PilotRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,6 +16,8 @@ import static org.mockito.Mockito.*;
 class PilotServiceImplTest {
     private PilotRepository pilotRepository;
     private PilotServiceImpl pilotService;
+
+    UUID pilotId = TestObjectBuilder.returnFixedId();
 
     @BeforeEach
     void setUp() {
@@ -36,16 +38,16 @@ class PilotServiceImplTest {
 
     @Test
     void testGetPilotById() {
-        UUID id = UUID.randomUUID();
+        UUID id = pilotId;
         PilotEntity pilot = new PilotEntity();
 
         when(pilotRepository.existsById(id)).thenReturn(true);
-        when(pilotRepository.findById(id)).thenReturn(Optional.of(pilot));
+        when(pilotRepository.getById(id)).thenReturn(pilot);
 
         PilotEntity result = pilotService.getPilotById(id);
 
-        assertEquals(pilot, result.get());
-        verify(pilotRepository, times(1)).findById(id);
+        assertEquals(pilot, result);
+        verify(pilotRepository, times(1)).getById(id);
     }
 
     @Test
@@ -62,7 +64,7 @@ class PilotServiceImplTest {
     @Test
     void testUpdatePilot() {
         // Prepare test data
-        UUID id = UUID.randomUUID();
+        UUID id = pilotId;
 
         PilotEntity existingPilot = new PilotEntity();
         existingPilot.setId(id);
@@ -94,7 +96,7 @@ class PilotServiceImplTest {
 
     @Test
     void testUpdatePilotNotFound() {
-        UUID id = UUID.randomUUID();
+        UUID id = pilotId;
         PilotEntity existingPilot = new PilotEntity();
         existingPilot.setId(id);
         existingPilot.setRating("B");
@@ -113,7 +115,7 @@ class PilotServiceImplTest {
 
     @Test
     void testDeletePilot() {
-        UUID id = UUID.randomUUID();
+        UUID id = pilotId;
 
         when(pilotRepository.existsById(id)).thenReturn(true);
 
@@ -125,7 +127,7 @@ class PilotServiceImplTest {
 
     @Test
     void testDeletePilotNotFound() {
-        UUID id = UUID.randomUUID();
+        UUID id = pilotId;
 
         when(pilotRepository.existsById(id)).thenReturn(false);
 
