@@ -8,6 +8,7 @@ import org.rebelalliance.flightplanner.service.TripService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -22,9 +23,18 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public TripEntity createTrip(TripEntity params) {
-        tripRepository.save(params);
-        return params;
+    public TripEntity createTrip(TripEntity trip) {
+        tripRepository.save(trip);
+        return trip;
+    }
+
+    @Override
+    public Optional<TripEntity> getTripById(UUID id) {
+        if (tripRepository.existsById(id)) {
+            return tripRepository.findById(id);
+        } else {
+            throw new IllegalArgumentException("Trip not found with ID: " + id);
+        }
     }
 
     @Override
@@ -33,26 +43,26 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public TripEntity getTripById(UUID id) {
-        return tripRepository.getById(id);
-    }
-
-    @Override
-    public TripEntity updateTrip(TripEntity params, UUID id) {
-        TripEntity trip = tripRepository.getById(id);
-        trip.setRouteid(params.getRouteid());
-        trip.setShipid(params.getShipid());
-        trip.setPilotid(params.getPilotid());
-        trip.setBookings(params.getBookings());
-        trip.setDeparturescheduled(params.getDeparturescheduled());
-        trip.setArrivalscheduled(params.getArrivalscheduled());
-        trip.setDepartureactual(params.getDepartureactual());
-        trip.setArrivalactual(params.getArrivalactual());
-        return tripRepository.save(trip);
+    public TripEntity updateTrip(UUID id, TripEntity trip) {
+        return tripRepository.findById(id).map(existingTrip -> {
+            trip.setRouteid(trip.getRouteid());
+            trip.setShipid(trip.getShipid());
+            trip.setPilotid(trip.getPilotid());
+            trip.setBookings(trip.getBookings());
+            trip.setDeparturescheduled(trip.getDeparturescheduled());
+            trip.setArrivalscheduled(trip.getArrivalscheduled());
+            trip.setDepartureactual(trip.getDepartureactual());
+            trip.setArrivalactual(trip.getArrivalactual());
+            return tripRepository.save(trip);
+        }).orElseThrow(() -> new IllegalArgumentException("Trip not found with ID: " + id));
     }
 
     @Override
     public void deleteTrip(UUID id) {
-        tripRepository.deleteById(id);
+        if (tripRepository.existsById(id)) {
+            tripRepository.deleteById(id);
+        } else {
+            throw new IllegalArgumentException("Trip not found with ID: " + id);
+        }
     }
 }

@@ -3,17 +3,16 @@ package org.rebelalliance.flightplanner.service;
 import org.rebelalliance.flightplanner.model.PilotEntity;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface PilotService {
     PilotEntity createPilot(PilotEntity pilot);
 
-    Optional<PilotEntity> getPilotById(UUID id);
+    PilotEntity getPilotById(UUID id);
 
     List<PilotEntity> getAllPilots();
 
-    PilotEntity updatePilot(UUID id, PilotEntity params);
+    PilotEntity updatePilot(UUID id, PilotEntity pilot);
 
     void deletePilot(UUID id);
 }

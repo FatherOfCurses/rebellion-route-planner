@@ -1,19 +1,20 @@
 package org.rebelalliance.flightplanner.service.impl;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.rebelalliance.flightplanner.model.BookingEntity;
 import org.rebelalliance.flightplanner.repositories.BookingRepository;
 import org.rebelalliance.flightplanner.service.BookingService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class BookingServiceImpl implements BookingService {
 
-    @Autowired
     private BookingRepository bookingRepository;
 
     public BookingServiceImpl(BookingRepository bookingRepository) {
@@ -26,8 +27,12 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Optional<BookingEntity> getBookingById(UUID id) {
-        return bookingRepository.findById(id);
+    public BookingEntity getBookingById(UUID id) {
+        if (bookingRepository.existsById(id)) {
+            return bookingRepository.getById(id);
+        } else {
+            throw new IllegalArgumentException("Booking not found with ID: " + id);
+        }
     }
 
     @Override

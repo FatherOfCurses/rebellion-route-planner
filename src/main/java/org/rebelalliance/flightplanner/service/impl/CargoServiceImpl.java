@@ -1,22 +1,21 @@
 package org.rebelalliance.flightplanner.service.impl;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.rebelalliance.flightplanner.model.CargoEntity;
 import org.rebelalliance.flightplanner.repositories.CargoRepository;
 import org.rebelalliance.flightplanner.service.CargoService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class CargoServiceImpl implements CargoService {
 
     private final CargoRepository cargoRepository;
-
-    public CargoServiceImpl(CargoRepository cargoRepository) {
-        this.cargoRepository = cargoRepository;
-    }
 
     @Override
     public CargoEntity createCargo(CargoEntity cargo) {
@@ -24,8 +23,12 @@ public class CargoServiceImpl implements CargoService {
     }
 
     @Override
-    public Optional<CargoEntity> getCargoById(UUID id) {
-        return cargoRepository.findById(id);
+    public CargoEntity getCargoById(UUID id) {
+        if (cargoRepository.existsById(id)) {
+            return cargoRepository.getById(id);
+        } else {
+            throw new IllegalArgumentException("Cargo not found with ID: " + id);
+        }
     }
 
     @Override

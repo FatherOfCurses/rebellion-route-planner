@@ -1,20 +1,19 @@
 package org.rebelalliance.flightplanner.service;
 
 import org.rebelalliance.flightplanner.model.TripEntity;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-@Component
 public interface TripService {
     TripEntity createTrip(TripEntity params);
 
+    Optional<TripEntity> getTripById(UUID id);
+
     List<TripEntity> getAllTrips();
 
-    TripEntity getTripById(UUID id);
-
-    TripEntity updateTrip(TripEntity params, UUID id);
+    TripEntity updateTrip(UUID id, TripEntity trip);
 
     void deleteTrip(UUID id);
 }

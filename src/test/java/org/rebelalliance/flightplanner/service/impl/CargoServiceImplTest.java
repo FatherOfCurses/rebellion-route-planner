@@ -6,10 +6,10 @@ import org.mockito.Mockito;
 import org.rebelalliance.flightplanner.model.CargoEntity;
 import org.rebelalliance.flightplanner.repositories.CargoRepository;
 
-import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 class CargoServiceImplTest {
@@ -24,7 +24,7 @@ class CargoServiceImplTest {
     }
 
     @Test
-    void createCargo() {
+    void testCreateCargo() {
         CargoEntity cargo = new CargoEntity();
         when(cargoRepository.save(cargo)).thenReturn(cargo);
 
@@ -35,20 +35,21 @@ class CargoServiceImplTest {
     }
 
     @Test
-    void getCargoById() {
+    void testGetCargoById() {
         UUID id = UUID.randomUUID();
         CargoEntity cargo = new CargoEntity();
-        when(cargoRepository.findById(id)).thenReturn(Optional.of(cargo));
+        when(cargoRepository.existsById(id)).thenReturn(true);
+        when(cargoRepository.getById(id)).thenReturn(cargo);
 
-        Optional<CargoEntity> result = cargoService.getCargoById(id);
+        CargoEntity result = cargoService.getCargoById(id);
 
-        assertTrue(result.isPresent());
-        assertEquals(cargo, result.get());
+        assertNotNull(result);
+        assertEquals(id, result.getId());
         verify(cargoRepository, times(1)).findById(id);
     }
 
     @Test
-    void deleteCargo() {
+    void testDeleteCargo() {
         UUID id = UUID.randomUUID();
         when(cargoRepository.existsById(id)).thenReturn(true);
 

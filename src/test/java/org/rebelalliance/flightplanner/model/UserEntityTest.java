@@ -1,6 +1,8 @@
 package org.rebelalliance.flightplanner.model;
 
+
 import org.junit.jupiter.api.Test;
+import org.rebelalliance.flightplanner.model.helper.TestObjectBuilder;
 
 import java.util.UUID;
 
@@ -34,21 +36,14 @@ class UserEntityTest {
     void testBuilder() {
         // Create test data
         UUID id = UUID.randomUUID();
-        String firstname = "Leia";
-        String lastname = "Organa";
-        String usertype = "Commander";
-        String username = "leia.organa";
-        String email = "leia@rebellion.org";
+        String firstname = "Luke";
+        String lastname = "Skywalker";
+        String usertype = "Pilot";
+        String username = "luke.skywalker";
+        String email = "luke@rebellion.org";
 
         // Create an instance using the builder
-        UserEntity user = UserEntity.builder()
-                .id(id)
-                .firstname(firstname)
-                .lastname(lastname)
-                .usertype(usertype)
-                .username(username)
-                .email(email)
-                .build();
+        UserEntity user = TestObjectBuilder.createTestUser();
 
         // Assert values using getters
         assertEquals(id, user.getId());

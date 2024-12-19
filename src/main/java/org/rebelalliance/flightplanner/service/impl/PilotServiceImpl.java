@@ -8,7 +8,6 @@ import org.rebelalliance.flightplanner.service.PilotService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -24,9 +23,9 @@ public class PilotServiceImpl implements PilotService {
     }
 
     @Override
-    public Optional<PilotEntity> getPilotById(UUID id) {
+    public PilotEntity getPilotById(UUID id) {
         if (pilotRepository.existsById(id)) {
-            return pilotRepository.findById(id);
+            return pilotRepository.getById(id);
         } else {
             throw new IllegalArgumentException("Pilot not found with ID: " + id);
         }
@@ -38,20 +37,16 @@ public class PilotServiceImpl implements PilotService {
     }
 
     @Override
-    public PilotEntity updatePilot(UUID id, PilotEntity params) {
-        if (pilotRepository.existsById(id)) {
-            PilotEntity pilot = pilotRepository.getById(id);
-            pilot.setId(params.getId());
-            pilot.setUser(params.getUser());
-            pilot.setRating(params.getRating());
-            pilot.setStanding(params.getStanding());
-            pilot.setHomePort(params.getHomePort());
-            pilot.setCurrentPort(params.getCurrentPort());
-            return pilotRepository.save(pilot);
-        } else {
-            throw new IllegalArgumentException("Pilot not found with ID: " + id);
-        }
-
+    public PilotEntity updatePilot(UUID id, PilotEntity pilot) {
+        return pilotRepository.findById(id).map(existingPilot -> {
+            existingPilot.setId(pilot.getId());
+            existingPilot.setUser(pilot.getUser());
+            existingPilot.setRating(pilot.getRating());
+            existingPilot.setStanding(pilot.getStanding());
+            existingPilot.setHomePort(pilot.getHomePort());
+            existingPilot.setCurrentPort(pilot.getCurrentPort());
+            return pilotRepository.save(existingPilot);
+        }).orElseThrow(() -> new IllegalArgumentException("Pilot not found with ID: " + id));
     }
 
     @Override

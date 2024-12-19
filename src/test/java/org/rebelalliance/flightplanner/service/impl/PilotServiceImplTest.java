@@ -42,9 +42,8 @@ class PilotServiceImplTest {
         when(pilotRepository.existsById(id)).thenReturn(true);
         when(pilotRepository.findById(id)).thenReturn(Optional.of(pilot));
 
-        Optional<PilotEntity> result = pilotService.getPilotById(id);
+        PilotEntity result = pilotService.getPilotById(id);
 
-        assertTrue(result.isPresent());
         assertEquals(pilot, result.get());
         verify(pilotRepository, times(1)).findById(id);
     }

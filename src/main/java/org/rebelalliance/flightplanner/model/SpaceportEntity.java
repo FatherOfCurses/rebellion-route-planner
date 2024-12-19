@@ -66,35 +66,4 @@ public class SpaceportEntity {
     @Column(name = "status", nullable = false)
     private String status;
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getSpaceportName() {
-        return spaceportName;
-    }
-
-    public String getSpaceportSize() {
-        return spaceportSize;
-    }
-
-    public int getLocationX() {
-        return locationX;
-    }
-
-    public int getLocationY() {
-        return locationY;
-    }
-
-    public int getLocationZ() {
-        return locationZ;
-    }
-
-    public String getStatus() {
-        return status;
-    }
 }
